@@ -1,10 +1,15 @@
 -----------------------------------------------------------------------------------------
 --
--- main.lua
--- file ran on startup
+-- new.lua
+-- new file menu
 -----------------------------------------------------------------------------------------
 -- Requires
 local composer = require "composer"
 
--- Go to main menu scene on startup
-composer.gotoScene("scn.mnu.str")
+-- Initialize Scene
+local scene = composer.newScene()
+
+
+
+
+return scene
