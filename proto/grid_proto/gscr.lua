@@ -21,6 +21,15 @@ function Grid.new(a, b)
 	return grid
 end
 
+function Grid.alterCell(zone, cell, id, n)
+	cell[id] = n
+	cellString = tostring(cell.x) .. "." .. tostring(cell.y) .. "." .. tostring(cell.typ)
+	cellString = cellString .. "." .. tostring(cell.pas) .. "." .. tostring(cell.spn)
+	print(cellString)
+	File.alterZoneFile(zone, cellString)
+	return cell
+end
+
 function Grid.zoneToGrid(zone)
 	local zoneData = File.getZoneFile(zone)
 	local xsize = 0
@@ -56,13 +65,14 @@ function Grid.zoneToGrid(zone)
 					zoneGrid[x][y].spn = tonumber(k)
 				end
 				id = id + 1
-			end
+			end	
 		end
+		zoneGrid[x][y].x = x
+		zoneGrid[x][y].y = y
 		zoneData[i] = nil
 	end
 	zoneData = nil
 	
-	Grid.print(zoneGrid)
 	return zoneGrid
 end
 

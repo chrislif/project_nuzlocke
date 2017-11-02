@@ -4,6 +4,7 @@
 -- File functions
 -----------------------------------------------------------------------------------------
 local File = {}
+local fileNumber = tostring(1) .. "f_"
 
 function File.fileExists(name)
 	local res = false
@@ -16,8 +17,8 @@ end
 
 function File.getFile(file)
 	local path = nil
-	if File.fileExists("L" .. file) then
-		path = system.pathForFile("map/L" .. file .. ".txt", system.ResourceDirectory)
+	if File.fileExists(fileNumber .. file) then
+		path = system.pathForFile("map/" .. fileNumber .. file .. ".txt", system.ResourceDirectory)
 	else
 		path = system.pathForFile("map/" .. file .. ".txt", system.ResourceDirectory)
 	end
@@ -47,9 +48,9 @@ end
 function File.alterZoneFile(file, cellString)
 	local path = system.pathForFile(nil, system.ResourceDirectory)
 	
-	if File.fileExists("L" .. file) then
+	if File.fileExists(fileNumber .. file) then
 		print("File exists")
-		path = path .. "/map/L" .. file .. ".txt"
+		path = path .. "/map/" .. fileNumber .. file .. ".txt"
 	else
 		print("file does not exist")
 		path = path .. "/map/" .. file .. ".txt"
@@ -64,7 +65,7 @@ function File.alterZoneFile(file, cellString)
 	local infile = nil
 
 	path = system.pathForFile(nil, system.ResourceDirectory)
-	path = path .. "/map/L" .. file .. ".txt"
+	path = path .. "/map/" .. fileNumber .. file .. ".txt"
 	
 	local outfile = io.open(path, "w")
 	instr = instr .. "\n" .. cellString
