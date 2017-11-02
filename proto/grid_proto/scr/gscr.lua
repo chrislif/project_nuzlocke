@@ -53,6 +53,7 @@ function Grid.zoneToGrid(zone)
 		local y = 0
 		for k in string.gmatch(cellString, "%d*") do
 			if k ~= "" then
+				print(k)
 				if id == 0 then
 					x = tonumber(k)
 				elseif id == 1 then
