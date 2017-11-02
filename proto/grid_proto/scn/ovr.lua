@@ -37,7 +37,7 @@ function scene.moveScene(event)
 	if endFlag == false then
 		if moveFlag == true then
 			moveFlag = false
-			timer.performWithDelay(250, scene.allowMove)
+			timer.performWithDelay(400, scene.allowMove)
 			local mdir = scene.getTapLocation()
 			Zone.moveZone(mdir)
 		end

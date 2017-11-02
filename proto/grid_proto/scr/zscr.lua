@@ -69,11 +69,13 @@ function Zone.moveZone(mdir)
 	
 	if Zone.passableCell(xshift, yshift) then
 		for _, cell in pairs(cellMap) do
-			transition.to(cell, {time = 250, x = cell.x + (xshift * cellSize), y = cell.y + (yshift * cellSize)})
+			transition.to(cell, {time = 400, x = cell.x + (xshift * cellSize), y = cell.y + (yshift * cellSize)})
+			
 		end
 		for _, obj in pairs(objMap) do
-			transition.to(obj, {time = 250, x = obj.x + (xshift * cellSize), y = obj.y + (yshift * cellSize)})
+			transition.to(obj, {time = 400, x = obj.x + (xshift * cellSize), y = obj.y + (yshift * cellSize)})
 		end
+		Asset.playerAnimate(mdir)
 		zx = zx - xshift
 		zy = zy - yshift
 	end

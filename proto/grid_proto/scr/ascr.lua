@@ -3,9 +3,12 @@
 -- ascr.lua
 -- Asset functions
 -----------------------------------------------------------------------------------------
+local Sprite = require "scr.spscr"
 local Asset = {}
 
 local cellSize = 32
+
+local spriteSheetTable = Sprite.loadSpriteSheets()
 
 local imgTable = {}
 imgTable[0] = "bar.png"
@@ -15,6 +18,8 @@ imgTable[3] = "wtr.png"
 
 local sprTable = {}
 sprTable[0] = "box.png"
+
+local player = nil
 
 function Asset.drawCell(cell, dx, dy)
 	local img = imgTable[cell.typ]
@@ -36,10 +41,17 @@ function Asset.drawObj(dx, dy)
 	return newObj
 end
 
+function Asset.playerAnimate(mdir)
+	if player ~= nil then
+		player:setSequence("dwalk")
+		player:play()
+	end
+end
+
 function Asset.drawPlayer()
-	local player = display.newImage("assets/plr.png")
+	player = display.newSprite(spriteSheetTable["player"], spriteSheetTable["playerData"])
 	player.x = display.contentCenterX
-	player.y = display.contentCenterY - 16
+	player.y = display.contentCenterY - 8
 end
 
 function Asset.removeMap(cellMap)

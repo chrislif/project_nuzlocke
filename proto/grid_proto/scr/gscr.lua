@@ -25,7 +25,6 @@ function Grid.alterCell(zone, cell, id, n)
 	cell[id] = n
 	cellString = tostring(cell.x) .. "." .. tostring(cell.y) .. "." .. tostring(cell.typ)
 	cellString = cellString .. "." .. tostring(cell.pas) .. "." .. tostring(cell.spn)
-	print(cellString)
 	File.alterZoneFile(zone, cellString)
 	return cell
 end
@@ -53,7 +52,6 @@ function Grid.zoneToGrid(zone)
 		local y = 0
 		for k in string.gmatch(cellString, "%d*") do
 			if k ~= "" then
-				print(k)
 				if id == 0 then
 					x = tonumber(k)
 				elseif id == 1 then
