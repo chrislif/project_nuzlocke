@@ -79,19 +79,19 @@ end
 function Grid.tostring(grid)
 	local s = "{"
 	local sep = ""
-	for x, i in pairs(grid) do
-		for y, j in pairs(i) do
-			local data = "id:" .. x
-			data = data .. "." .. y
+	local c = 0
+	for _, i in pairs(grid) do
+		for _, j in pairs(i) do
+			local data = "cell_" .. tostring(c) .. ":" .. tostring(j.x)
+			data = data .. "." .. tostring(j.y)
 			data = data .. "." .. tostring(j.typ)
 			data = data .. "." .. tostring(j.pas)
 			data = data .. "." .. tostring(j.spn)
 			s = s .. sep .. data
 			sep = ", "
-			y = y + 1
+			c = c + 1
 		end
 		sep = "\n"
-		x = x + 1
 	end
 	return s .. "}"
 end

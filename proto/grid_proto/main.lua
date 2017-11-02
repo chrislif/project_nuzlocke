@@ -3,7 +3,8 @@
 -- main.lua
 --
 -----------------------------------------------------------------------------------------
-local Zone = require "zscr"
+local composer = require "composer" 
 
-Zone.loadZone("zone0")
-Zone.printCurrent()
+display.setStatusBar(display.HiddenStatusBar)
+
+composer.gotoScene("ovr")
