@@ -4,7 +4,7 @@
 -- Overworld Scene
 -----------------------------------------------------------------------------------------
 local composer = require "composer"
-local Zone = require "zscr"
+local Zone = require "scr.zscr"
 
 local scene = composer.newScene()
 

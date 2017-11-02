@@ -3,8 +3,8 @@
 -- zscr.lua
 -- Zone functions
 -----------------------------------------------------------------------------------------
-local Grid = require "gscr"
-local Asset = require "ascr"
+local Grid = require "scr.gscr"
+local Asset = require "scr.ascr"
 
 local Zone = {}
 

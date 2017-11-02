@@ -3,8 +3,8 @@
 -- gscr.lua
 -- Grid functions
 -----------------------------------------------------------------------------------------
-local Cell = require "cscr"
-local File = require "fscr"
+local Cell = require "scr.cscr"
+local File = require "scr.fscr"
 
 local Grid = {}
 Grid.mt = {}
