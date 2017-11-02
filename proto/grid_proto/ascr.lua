@@ -14,7 +14,7 @@ imgTable[2] = "snd.png"
 imgTable[3] = "wtr.png"
 
 local sprTable = {}
-sprTable[0] = "plr.png"
+sprTable[0] = "box.png"
 
 function Asset.drawCell(cell, dx, dy)
 	local img = imgTable[cell.typ]
@@ -24,6 +24,22 @@ function Asset.drawCell(cell, dx, dy)
 	newCell.y = display.contentCenterY + (dy * cellSize)
 	
 	return newCell
+end
+
+function Asset.drawObj(dx, dy)
+	local img = sprTable[0]
+
+	local newObj = display.newImage("assets/" .. img)
+	newObj.x = display.contentCenterX + (dx * cellSize)
+	newObj.y = display.contentCenterY + (dy * cellSize)
+	
+	return newObj
+end
+
+function Asset.drawPlayer()
+	local player = display.newImage("assets/plr.png")
+	player.x = display.contentCenterX
+	player.y = display.contentCenterY - 16
 end
 
 function Asset.removeMap(cellMap)
