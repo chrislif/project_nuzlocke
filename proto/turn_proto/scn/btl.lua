@@ -11,6 +11,8 @@ local playerTeam = nil
 
 function scene:create(event)
 	Data.loadData()
+	
+	print(Data.PLY[1]["MONID"])
 end
 
 scene:addEventListener("create", scene)
