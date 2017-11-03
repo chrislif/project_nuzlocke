@@ -7,9 +7,10 @@ local composer = require "composer"
 local Data = require "scr.dscr"
 
 local scene = composer.newScene()
+local playerTeam = nil
 
 function scene:create(event)
-	local playerTeam = Data.loadPlayer()
+	Data.loadData()
 end
 
 scene:addEventListener("create", scene)
