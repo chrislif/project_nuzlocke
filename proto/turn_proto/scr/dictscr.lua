@@ -7,11 +7,11 @@ local File = require "scr.fscr"
 
 local Dict = {}
 
-function Dict.loadDictionary(typ, file)
+function Dict.loadDictionary(typ, dir, file)
 	if typ > 0 then
-		return Dict.complexLoad(typ, file)
+		return Dict.complexLoad(typ, dir, file)
 	else
-		return Dict.standardLoad(file)
+		return Dict.standardLoad(dir, file)
 	end
 end
 
@@ -52,7 +52,10 @@ function Dict.assignID(ct, dataID)
 	return c_table[ct][dataID]
 end
 
-function Dict.complexLoad(typ, file)
+function Dict.complexLoad(typ, dir, file)
+	if dir ~= nil then
+		file = dir .. "/" .. file
+	end
 	local fileData = File.getFile(file)
 	local dict = {}
 	local dataCell = {}
@@ -105,7 +108,10 @@ function Dict.complexLoad(typ, file)
 	return dict
 end
 
-function Dict.standardLoad(file)
+function Dict.standardLoad(dir, file)
+	if dir ~= nil then
+		file = dir .. "/" .. file
+	end
 	local fileData = File.getFile(file)
 	local dict = {}
 	

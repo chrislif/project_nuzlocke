@@ -5,15 +5,6 @@
 -----------------------------------------------------------------------------------------
 local File = {}
 
-function File.fileExists(name)
-	local res = false
-	local path = system.pathForFile("fil/" .. name .. ".txt", system.ResourceDirectory)
-	if path ~= nil then
-		res = true
-	end
-	return res
-end
-
 function File.getFile(file)
 	local path = system.pathForFile("fil/" .. file .. ".txt", system.ResourceDirectory)
 	local file, errorString = io.open(path, "r+")
