@@ -23,14 +23,14 @@ function Dict.assignID(ct, dataID)
 		[8] = "SPATK", [9] = "SPDEF", [10] = "SPE",
 		[11] = "HP_EV", [12] = "ATK_EV",[13] = "DEF_EV",
 		[14] = "SPATK_EV", [15] = "SPDEF_EV", [16] = "SPE_EV",
-		[17] = "ABIL", [18] = "NAT",
-		[19] = "MOV1", [20] = "M1_U",
-		[21] = "MOV2", [22] = "M2_U",
-		[23] = "MOV3", [24] = "M3_U",
-		[25] = "MOV4", [26] = "M4_U"
+		[17] = "ABIL", [18] = "NAT", [19] = "CURR_HP",
+		[20] = "MOV1", [21] = "M1_U",
+		[22] = "MOV2", [23] = "M2_U",
+		[24] = "MOV3", [25] = "M3_U",
+		[26] = "MOV4", [27] = "M4_U"
 	}
 	
-	local monID_table = 
+	local bytID_table = 
 	{
 		[0] = "ID", [1] = "NAME", [2] = "TYPE1", [3] = "TYPE2", 
 		[4] = "HP", [5] = "ATK", [6] = "DEF", [7] = "SPATK", [8] = "SPDEF", [9] = "SPE",
@@ -47,7 +47,7 @@ function Dict.assignID(ct, dataID)
 	{
 		[1] = pID_table,
 		[2] = mvID_table,
-		[3] = monID_table
+		[3] = bytID_table
 	}
 	return c_table[ct][dataID]
 end
@@ -65,7 +65,6 @@ function Dict.complexLoad(typ, dir, file)
 	local dataTable = {}
 	local tableName = ""
 	local tableID = 0
-	
 	
 	for _, dataString in pairs(fileData) do
 		for data in string.gmatch(dataString, "[*_/%w]*") do

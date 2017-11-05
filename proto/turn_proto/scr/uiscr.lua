@@ -6,14 +6,12 @@
 local Asset = require "scr.ascr"
 local Data = require "scr.dscr"
 local UI = {}
-UI.menu = nil
 UI.state = "FIGHT"
-UI.pMon = nil
 
 function UI.loadBtnText(btn, ID)
 	if UI.state == "FIGHT" then
-		local movID = tonumber(UI.pMon["MOV" .. ID])
-		local movUses = tostring(UI.pMon["M" .. ID .. "_U"])
+		local movID = tonumber(UI.pByt["MOV" .. ID])
+		local movUses = tostring(UI.pByt["M" .. ID .. "_U"])
 		local textString = ""
 		if movID ~= 0 then
 			textString = Data.MOV[movID]["NAME"] .. "\n" .. 
@@ -31,7 +29,8 @@ function UI.loadBtnText(btn, ID)
 		local byt = Data.PLY[ID]
 		local textString = ""
 		if byt ~= nil then
-			textString = byt["NAME"]
+			textString = byt["NAME"] .. "\n" ..
+			byt["CURR_HP"] .."/" .. Data.BYT[byt["ID"]]["HP"]
 		end
 		local textOptions = 
 		{
@@ -81,6 +80,9 @@ function UI.loadMenu(state)
 	else
 		menu = UI.load4BtnMenu()
 	end
+	UI.runBtn = Asset.loadImage("btn_6", 120, 235)
+	UI.runBtn:setFillColor( 1, 0, 0)
+	UI.toggleBtn = Asset.loadImage("btn_6", 120, 175)
 	UI.menu = menu
 end
 
@@ -90,6 +92,28 @@ function UI.clearMenu()
 		obj:removeSelf()
 		obj = nil
 	end
+end
+
+function UI.loadShelfText(shelf)
+	local bytHeaderString = shelf.byt["NAME"] .. " - LV" .. shelf.byt["LEVEL"]
+	local textOptions = 
+	{
+		text = bytHeaderString,
+		fontSize = 15,
+	}
+	shelf.bytName = display.newText(textOptions)
+	shelf.bytName.x = shelf.x - shelf.contentWidth/8
+	shelf.bytName.y = shelf.y - shelf.contentHeight/2 - 8
+	shelf.bytName:setFillColor(0, 0, 0)
+end
+
+function UI.loadShelves()
+	UI.pShelf = Asset.loadImage("pshlf", 80, 105)
+	UI.pShelf.byt = UI.pByt
+	UI.loadShelfText(UI.pShelf)
+	UI.eShelf = Asset.loadImage("eshlf", -80, -215)
+	UI.eShelf.byt = UI.eByt
+	UI.loadShelfText(UI.eShelf)
 end
 
 function UI.switchMenu()
@@ -107,17 +131,14 @@ end
 
 function UI.loadBackground()
 	UI.background = Asset.loadImage("back", 0, 0)
-	UI.pShelf = Asset.loadImage("pshlf", 80, 105)
-	UI.eShelf = Asset.loadImage("eshlf", -80, -235)
-	UI.runBtn = Asset.loadImage("btn_6", 120, 235)
-	UI.runBtn:setFillColor( 1, 0, 0)
-	UI.toggleBtn = Asset.loadImage("btn_6", 120, 175)
 end
 
 function UI.loadUI()
 	UI.loadBackground()
-	UI.pMon = Data.PLY[1]
+	UI.pByt = Data.PLY[1]
+	UI.eByt = Data.ENM[1]
 	UI.loadMenu("FIGHT")
+	UI.loadShelves()
 	UI.addEventListeners()
 end
 

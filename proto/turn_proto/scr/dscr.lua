@@ -14,14 +14,12 @@ function Data.loadData()
 	Data.BST = Dict.loadDictionary(0, "dict", "bst_dict")
 	Data.NPC = Dict.loadDictionary(0, "dict", "npc_dict")
 	Data.MOV = Dict.loadDictionary(2, "dict", "mov_dict")
-	Data.MON = Dict.loadDictionary(3, "dict", "mon_dict")
+	Data.BYT = Dict.loadDictionary(3, "dict", "byt_dict")
 end
 
 function Data.loadTeams(pNum, eNum)
 	Data.PLY = Dict.loadDictionary(1, nil, pNum .. "f_pteam")
 	Data.ENM = Dict.loadDictionary(1, "npc", eNum .. "_eteam")
-	
-	print(Data.PLY[1]["MOV1"])
 end
 
 return Data
