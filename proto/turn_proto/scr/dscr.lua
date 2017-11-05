@@ -20,6 +20,8 @@ end
 function Data.loadTeams(pNum, eNum)
 	Data.PLY = Dict.loadDictionary(1, nil, pNum .. "f_pteam")
 	Data.ENM = Dict.loadDictionary(1, "npc", eNum .. "_eteam")
+	
+	print(Data.PLY[1]["MOV1"])
 end
 
 return Data

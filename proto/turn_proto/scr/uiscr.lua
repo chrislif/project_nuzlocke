@@ -4,72 +4,121 @@
 -- User Interface functions
 -----------------------------------------------------------------------------------------
 local Asset = require "scr.ascr"
+local Data = require "scr.dscr"
 local UI = {}
 UI.menu = nil
 UI.state = "FIGHT"
+UI.pMon = nil
+
+function UI.loadBtnText(btn, ID)
+	if UI.state == "FIGHT" then
+		local movID = tonumber(UI.pMon["MOV" .. ID])
+		local movUses = tostring(UI.pMon["M" .. ID .. "_U"])
+		local textString = ""
+		if movID ~= 0 then
+			textString = Data.MOV[movID]["NAME"] .. "\n" .. 
+						 movUses .. " / " .. Data.MOV[movID]["USES"]
+		end
+		local textOptions =
+		{
+		text = textString,
+		}
+		btn.text = display.newText(textOptions)
+		btn.text:setFillColor(0, 0, 0)
+		btn.text.x = btn.x
+		btn.text.y = btn.y
+	elseif UI.state == "TEAM" then
+		local byt = Data.PLY[ID]
+		local textString = ""
+		if byt ~= nil then
+			textString = byt["NAME"]
+		end
+		local textOptions = 
+		{
+		text = textString,
+		fontSize = 15,
+		}
+		btn.text = display.newText(textOptions)
+		btn.text:setFillColor(0, 0, 0)
+		btn.text.x = btn.x
+		btn.text.y = btn.y
+	end
+end
+
+function UI.load4BtnMenu()
+	local btns = {
+	[1] = Asset.loadImage("btn_4", -100, 175),
+	[2] = Asset.loadImage("btn_4", 20, 175),
+	[3] = Asset.loadImage("btn_4", -100, 235),
+	[4] = Asset.loadImage("btn_4", 20, 235),
+	}
+	for ID, btn in pairs(btns) do
+		UI.loadBtnText(btn, ID)
+	end
+	return btns
+end
+
+function UI.load6BtnMenu()
+	local btns = {
+	[1] = Asset.loadImage("btn_6", -120, 175),
+	[2] = Asset.loadImage("btn_6", -40, 175),
+	[3] = Asset.loadImage("btn_6", 40, 175),
+	[4] = Asset.loadImage("btn_6", -120, 235),
+	[5] = Asset.loadImage("btn_6", -40, 235),
+	[6] = Asset.loadImage("btn_6", 40, 235),
+	}
+	for ID, btn in pairs(btns) do
+		UI.loadBtnText(btn, ID)
+	end
+	return btns
+end
 
 function UI.loadMenu(state)
 	UI.clearMenu()
-	if state == "FIGHT" then
-		UI.btn1 = UI.loadImage("btn", -100, 175)
-		UI.btn1.xScale = .75
-		UI.btn2 = UI.loadImage("btn", -100, 235)
-		UI.btn2.xScale = .75
-		UI.btn3 = UI.loadImage("btn", 20, 175)
-		UI.btn3.xScale = .75
-		UI.btn4 = UI.loadImage("btn", 20, 235)
-		UI.btn4.xScale = .75
-	elseif state == "TEAM" then
-		UI.btn1 = UI.loadImage("btn", -120, 175)
-		UI.btn1.xScale = .5
-		UI.btn2 = UI.loadImage("btn", -120, 235)
-		UI.btn2.xScale = .5
-		UI.btn3 = UI.loadImage("btn", -40, 175)
-		UI.btn3.xScale = .5
-		UI.btn4 = UI.loadImage("btn", -40, 235)
-		UI.btn4.xScale = .5
-		UI.btn5 = UI.loadImage("btn", 40, 175)
-		UI.btn5.xScale = .5
-		UI.btn6 = UI.loadImage("btn", 40, 235)
-		UI.btn6.xScale = .5
+	local menu = {}
+	if state == "TEAM" then
+		menu = UI.load6BtnMenu()
+	else
+		menu = UI.load4BtnMenu()
 	end
+	UI.menu = menu
 end
 
 function UI.clearMenu()
 	if UI.menu == nil then return end
 	for _, obj in pairs(UI.menu) do
 		obj:removeSelf()
+		obj = nil
 	end
 end
 
 function UI.switchMenu()
 	if UI.state == "FIGHT" then
-		UI.loadMenu("TEAM")
 		UI.state = "TEAM"
 	else
-		UI.loadMenu("FIGHT")
 		UI.state = "FIGHT"
 	end
+	UI.loadMenu(UI.state)
+end
+
+function UI.addEventListeners()
+	UI.toggleBtn:addEventListener("tap", UI.switchMenu)
+end
+
+function UI.loadBackground()
+	UI.background = Asset.loadImage("back", 0, 0)
+	UI.pShelf = Asset.loadImage("pshlf", 80, 105)
+	UI.eShelf = Asset.loadImage("eshlf", -80, -235)
+	UI.runBtn = Asset.loadImage("btn_6", 120, 235)
+	UI.runBtn:setFillColor( 1, 0, 0)
+	UI.toggleBtn = Asset.loadImage("btn_6", 120, 175)
 end
 
 function UI.loadUI()
-	UI.background = UI.loadImage("back", 0, 0)
-	UI.pShelf = UI.loadImage("pshlf", 80, 105)
-	UI.eShelf = UI.loadImage("eshlf", -80, -235)
-	UI.runBtn = UI.loadImage("btn", 120, 235)
-	UI.runBtn.xScale = 0.5
-	UI.runBtn:setFillColor( 1, 0, 0)
-	UI.toggleBtn = UI.loadImage("btn", 120, 175)
-	UI.toggleBtn.xScale = 0.5
-	UI.toggleBtn:addEventListener("tap", UI.switchMenu)
-	UI.loadMenu("TEAM")
-end
-
-function UI.loadImage(img, dx, dy)
-	local newImage = display.newImage("ast/" .. img .. ".png")
-	newImage.x = display.contentCenterX + dx
-	newImage.y = display.contentCenterY + dy
-	return newImage
+	UI.loadBackground()
+	UI.pMon = Data.PLY[1]
+	UI.loadMenu("FIGHT")
+	UI.addEventListeners()
 end
 
 return UI
