@@ -22,6 +22,7 @@ function UI.loadBtnText(btn, ID)
 		text = textString,
 		}
 		btn.text = display.newText(textOptions)
+		btn.data = Data.MOV[movID]
 		btn.text:setFillColor(0, 0, 0)
 		btn.text.x = btn.x
 		btn.text.y = btn.y
@@ -38,6 +39,7 @@ function UI.loadBtnText(btn, ID)
 		fontSize = 15,
 		}
 		btn.text = display.newText(textOptions)
+		btn.data = byt
 		btn.text:setFillColor(0, 0, 0)
 		btn.text.x = btn.x
 		btn.text.y = btn.y
@@ -81,8 +83,7 @@ function UI.loadMenu(state)
 		menu = UI.load4BtnMenu()
 	end
 	UI.runBtn = Asset.loadImage("btn_6", 120, 235)
-	UI.runBtn:setFillColor( 1, 0, 0)
-	UI.toggleBtn = Asset.loadImage("btn_6", 120, 175)
+	UI.runBtn:setFillColor(1, 0, 0)
 	UI.menu = menu
 end
 
@@ -96,8 +97,7 @@ end
 
 function UI.loadShelfText(shelf)
 	local bytHeaderString = shelf.byt["NAME"] .. " - LV" .. shelf.byt["LEVEL"]
-	local textOptions = 
-	{
+	local textOptions = {
 		text = bytHeaderString,
 		fontSize = 15,
 	}
@@ -105,6 +105,13 @@ function UI.loadShelfText(shelf)
 	shelf.bytName.x = shelf.x - shelf.contentWidth/8
 	shelf.bytName.y = shelf.y - shelf.contentHeight/2 - 8
 	shelf.bytName:setFillColor(0, 0, 0)
+	textOptions = {
+		text = shelf.byt["CURR_HP"] .. "/" .. Data.BYT[shelf.byt["ID"]]["HP"],
+	}
+	shelf.bytHP = display.newText(textOptions)
+	shelf.bytHP.x = shelf.x
+	shelf.bytHP.y = shelf.y - 8
+	shelf.bytHP:setFillColor(0, 0, 0)
 end
 
 function UI.loadShelves()
@@ -116,21 +123,19 @@ function UI.loadShelves()
 	UI.loadShelfText(UI.eShelf)
 end
 
-function UI.switchMenu()
-	if UI.state == "FIGHT" then
-		UI.state = "TEAM"
-	else
-		UI.state = "FIGHT"
-	end
-	UI.loadMenu(UI.state)
-end
-
-function UI.addEventListeners()
-	UI.toggleBtn:addEventListener("tap", UI.switchMenu)
-end
-
 function UI.loadBackground()
 	UI.background = Asset.loadImage("back", 0, 0)
+end
+
+function UI.loadToggleBtn()
+	UI.toggleBtn = Asset.loadImage("btn_6", 120, 175)
+	local textOptions = {
+		text = "TEAM",
+	}
+	UI.toggleBtn.text = display.newText(textOptions)
+	UI.toggleBtn.text:setFillColor(0, 0, 0)
+	UI.toggleBtn.text.x = UI.toggleBtn.x
+	UI.toggleBtn.text.y = UI.toggleBtn.y
 end
 
 function UI.loadUI()
@@ -138,8 +143,8 @@ function UI.loadUI()
 	UI.pByt = Data.PLY[1]
 	UI.eByt = Data.ENM[1]
 	UI.loadMenu("FIGHT")
+	UI.loadToggleBtn()
 	UI.loadShelves()
-	UI.addEventListeners()
 end
 
 return UI
