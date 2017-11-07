@@ -18,7 +18,7 @@ end
 function Dict.assignID(ct, dataID)
 	local pID_table = 
 	{
-		[0] = "ID", [1] = "MONID", [2] = "NAME", [3] = "LEVEL", [4] = "BOOST",
+		[0] = "ID", [1] = "BYTID", [2] = "NAME", [3] = "LEVEL", [4] = "BOOST",
 		[5] = "HP", [6] = "ATK",  [7] = "DEF", 
 		[8] = "SPATK", [9] = "SPDEF", [10] = "SPE",
 		[11] = "HP_EV", [12] = "ATK_EV",[13] = "DEF_EV",
@@ -39,15 +39,21 @@ function Dict.assignID(ct, dataID)
 
 	local mvID_table =
 	{
-		[0] = "ID", [1]= "NAME", [2] = "TYPE", [3] = "ATK_TYPE", 
+		[0] = "ID", [1] = "NAME", [2] = "TYPE", [3] = "ATK_TYPE", 
 		[4] = "PWR", [5] = "EFFECT", [6] = "%EFFECT", [7] = "USES",
 	}
-	
+	local typBonus_table =
+	{
+		[0] = "ID", [1] = 1, [2] = 2, [3] = 3, [4] = 4, [5] = 5,
+		[6] = 6, [7] = 7, [8] = 8, [9] = 9, [10] = 10, [11] = 11, 
+		[12] = 12, [13] = 13, [14] = 14, [15] = 15, [16] = 16, [17] = 17,
+	}
 		local c_table = 
 	{
 		[1] = pID_table,
 		[2] = mvID_table,
-		[3] = bytID_table
+		[3] = bytID_table,
+		[4] = typBonus_table,
 	}
 	return c_table[ct][dataID]
 end
@@ -67,7 +73,7 @@ function Dict.complexLoad(typ, dir, file)
 	local tableID = 0
 	
 	for _, dataString in pairs(fileData) do
-		for data in string.gmatch(dataString, "[*_/%w]*") do
+		for data in string.gmatch(dataString, "[-*_/%w]*") do
 			if data ~= "" then
 				if tableFlag == false then
 					if data == "/" then

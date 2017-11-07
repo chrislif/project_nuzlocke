@@ -4,74 +4,141 @@
 -- User Interface functions
 -----------------------------------------------------------------------------------------
 local Asset = require "scr.ascr"
-local Data = require "scr.dscr"
 local UI = {}
 UI.state = "FIGHT"
 
-function UI.loadBtnText(btn, ID)
+local backGroup = display.newGroup()
+local menuGroup = display.newGroup()
+
+function UI.loadText(obj, textStr, dx, dy)
+	local textOptions = {
+		text = textStr,
+		fontSize = 15,
+		align = "center"
+	}
+	obj.text = display.newText(textOptions)
+	obj.text.x = obj.x + dx
+	obj.text.y = obj.y + dy
+	obj.text:setFillColor(0, 0, 0)
+end
+
+function UI.loadMenuText(btn, ID)
 	if UI.state == "FIGHT" then
-		local movID = tonumber(UI.pByt["MOV" .. ID])
-		local movUses = tostring(UI.pByt["M" .. ID .. "_U"])
+		local movID = UI.pByt["MOV" .. ID]
+		local movUses = UI.pByt["M" .. ID .. "_U"]
 		local textString = ""
 		if movID ~= 0 then
-			textString = Data.MOV[movID]["NAME"] .. "\n" .. 
-						 movUses .. " / " .. Data.MOV[movID]["USES"]
+			textString = UI.movData[movID]["NAME"] .. "\n" .. 
+			movUses .. " / " .. UI.movData[movID]["USES"]
 		end
-		local textOptions =
-		{
-		text = textString,
-		}
-		btn.text = display.newText(textOptions)
-		btn.data = Data.MOV[movID]
-		btn.text:setFillColor(0, 0, 0)
-		btn.text.x = btn.x
-		btn.text.y = btn.y
+		UI.loadText(btn, textString, 0, 0)
+		if movID ~= 0 then
+			btn.data = {
+				["typ"] = 1,
+				["ID"] = movID,
+				["target"] = "enemy"
+			}
+		end
 	elseif UI.state == "TEAM" then
-		local byt = Data.PLY[ID]
+		local byt = UI.pData[ID]
 		local textString = ""
 		if byt ~= nil then
 			textString = byt["NAME"] .. "\n" ..
-			byt["CURR_HP"] .."/" .. Data.BYT[byt["ID"]]["HP"]
+			byt["CURR_HP"] .."/" .. UI.bytData[byt["ID"]]["HP"]
 		end
-		local textOptions = 
-		{
-		text = textString,
-		fontSize = 15,
-		}
-		btn.text = display.newText(textOptions)
-		btn.data = byt
-		btn.text:setFillColor(0, 0, 0)
-		btn.text.x = btn.x
-		btn.text.y = btn.y
+		UI.loadText(btn, textString, 0, 0)
+		if byt ~= nil then
+			btn.data = {
+				["typ"] = 0,
+				["ID"] = byt["ID"],
+				["target"] = "pTeam"
+			}
+		end
 	end
 end
 
+function UI.loadShelfText(shelf)
+	local bytHeaderString = shelf.byt["NAME"] .. " - LV" .. shelf.byt["LEVEL"]
+	UI.loadText(shelf, bytHeaderString, -shelf.contentWidth/8, -shelf.contentHeight/2 - 8)
+	local healthString = shelf.byt["CURR_HP"] .. "/" .. UI.bytData[shelf.byt["ID"]]["HP"]
+	UI.loadText(shelf, healthString, 0, -8)
+end
+
+function UI.moveHealthBar(hbar, dir)
+	local eq = dir * math.floor(hbar.contentWidth/2 - (hbar.contentWidth * hbar.hPcnt)/2)
+	hbar.xScale = hbar.hPcnt
+	hbar.x = hbar.x + eq
+end
+
+function UI.setHealthBar(shelf)
+	local dir = 0
+	if shelf.id == "player" then 
+		dir = 1
+	else 
+		dir = -1
+	end
+	shelf.health = Asset.loadSprite("hbar", shelf.dx, shelf.dy - 20, menuGroup)
+	shelf.health.hPcnt = shelf.byt["CURR_HP"] / UI.bytData[shelf.byt["ID"]]["HP"]
+	UI.moveHealthBar(shelf.health, dir)
+end
+
+function UI.loadShelves()
+	-- Player Shelf
+	UI.pShelf = Asset.loadImage("pshlf", 80, 105, menuGroup)
+	UI.pShelf.byt = UI.pByt
+	UI.pShelf.id = "player"
+	UI.setHealthBar(UI.pShelf)
+	UI.loadShelfText(UI.pShelf)
+	-- Enemy Shelf
+	UI.eShelf = Asset.loadImage("eshlf", -80, -215, menuGroup)
+	UI.eShelf.id = "enemy"
+	UI.eShelf.byt = UI.eByt
+	UI.setHealthBar(UI.eShelf)
+	UI.loadShelfText(UI.eShelf)
+end
+
+function UI.loadToggleBtn()
+	UI.toggleBtn = Asset.loadImage("btn_6", 120, 175, menuGroup)
+	UI.loadText(UI.toggleBtn, "TEAM", 0, 0)
+end
+
+
 function UI.load4BtnMenu()
 	local btns = {
-	[1] = Asset.loadImage("btn_4", -100, 175),
-	[2] = Asset.loadImage("btn_4", 20, 175),
-	[3] = Asset.loadImage("btn_4", -100, 235),
-	[4] = Asset.loadImage("btn_4", 20, 235),
+	[1] = Asset.loadImage("btn_4", -100, 175, menuGroup),
+	[2] = Asset.loadImage("btn_4", 20, 175, menuGroup),
+	[3] = Asset.loadImage("btn_4", -100, 235, menuGroup),
+	[4] = Asset.loadImage("btn_4", 20, 235, menuGroup),
 	}
 	for ID, btn in pairs(btns) do
-		UI.loadBtnText(btn, ID)
+		UI.loadMenuText(btn, ID)
 	end
 	return btns
 end
 
 function UI.load6BtnMenu()
 	local btns = {
-	[1] = Asset.loadImage("btn_6", -120, 175),
-	[2] = Asset.loadImage("btn_6", -40, 175),
-	[3] = Asset.loadImage("btn_6", 40, 175),
-	[4] = Asset.loadImage("btn_6", -120, 235),
-	[5] = Asset.loadImage("btn_6", -40, 235),
-	[6] = Asset.loadImage("btn_6", 40, 235),
+	[1] = Asset.loadImage("btn_6", -120, 175, menuGroup),
+	[2] = Asset.loadImage("btn_6", -40, 175, menuGroup),
+	[3] = Asset.loadImage("btn_6", 40, 175, menuGroup),
+	[4] = Asset.loadImage("btn_6", -120, 235, menuGroup),
+	[5] = Asset.loadImage("btn_6", -40, 235, menuGroup),
+	[6] = Asset.loadImage("btn_6", 40, 235, menuGroup),
 	}
 	for ID, btn in pairs(btns) do
-		UI.loadBtnText(btn, ID)
+		UI.loadMenuText(btn, ID)
 	end
 	return btns
+end
+
+function UI.clearMenu()
+	if UI.menu ~= nil then
+		for _, obj in pairs(UI.menu) do
+			obj.text:removeSelf()
+			obj:removeSelf()
+			obj = nil
+		end
+	end
 end
 
 function UI.loadMenu(state)
@@ -82,69 +149,33 @@ function UI.loadMenu(state)
 	else
 		menu = UI.load4BtnMenu()
 	end
-	UI.runBtn = Asset.loadImage("btn_6", 120, 235)
+	UI.runBtn = Asset.loadImage("btn_6", 120, 235, menuGroup)
 	UI.runBtn:setFillColor(1, 0, 0)
 	UI.menu = menu
 end
 
-function UI.clearMenu()
-	if UI.menu == nil then return end
-	for _, obj in pairs(UI.menu) do
-		obj:removeSelf()
-		obj = nil
-	end
-end
-
-function UI.loadShelfText(shelf)
-	local bytHeaderString = shelf.byt["NAME"] .. " - LV" .. shelf.byt["LEVEL"]
-	local textOptions = {
-		text = bytHeaderString,
-		fontSize = 15,
-	}
-	shelf.bytName = display.newText(textOptions)
-	shelf.bytName.x = shelf.x - shelf.contentWidth/8
-	shelf.bytName.y = shelf.y - shelf.contentHeight/2 - 8
-	shelf.bytName:setFillColor(0, 0, 0)
-	textOptions = {
-		text = shelf.byt["CURR_HP"] .. "/" .. Data.BYT[shelf.byt["ID"]]["HP"],
-	}
-	shelf.bytHP = display.newText(textOptions)
-	shelf.bytHP.x = shelf.x
-	shelf.bytHP.y = shelf.y - 8
-	shelf.bytHP:setFillColor(0, 0, 0)
-end
-
-function UI.loadShelves()
-	UI.pShelf = Asset.loadImage("pshlf", 80, 105)
-	UI.pShelf.byt = UI.pByt
-	UI.loadShelfText(UI.pShelf)
-	UI.eShelf = Asset.loadImage("eshlf", -80, -215)
-	UI.eShelf.byt = UI.eByt
-	UI.loadShelfText(UI.eShelf)
-end
-
 function UI.loadBackground()
-	UI.background = Asset.loadImage("back", 0, 0)
+	UI.background = Asset.loadImage("back", 0, 0, backGroup)
 end
 
-function UI.loadToggleBtn()
-	UI.toggleBtn = Asset.loadImage("btn_6", 120, 175)
-	local textOptions = {
-		text = "TEAM",
-	}
-	UI.toggleBtn.text = display.newText(textOptions)
-	UI.toggleBtn.text:setFillColor(0, 0, 0)
-	UI.toggleBtn.text.x = UI.toggleBtn.x
-	UI.toggleBtn.text.y = UI.toggleBtn.y
-end
-
-function UI.loadUI()
+function UI.loadUI(movData, bytData, pData, eData, pByt, eByt)
+	-- Pass Data
+	UI.eData = eData
+	UI.pData = pData
+	UI.bytData = bytData
+	UI.movData = movData
+	UI.pByt = pByt
+	UI.eByt = eByt
+	
+	Asset.loadData()
 	UI.loadBackground()
-	UI.pByt = Data.PLY[1]
-	UI.eByt = Data.ENM[1]
 	UI.loadMenu("FIGHT")
 	UI.loadToggleBtn()
 	UI.loadShelves()
+end
+
+function UI.update()
+	
 end
 
 return UI

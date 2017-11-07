@@ -9,6 +9,7 @@ local Data = {}
 
 function Data.loadData()
 	Data.TYP = Dict.loadDictionary(0, "dict", "typ_dict")
+	Data.TBL = Dict.loadDictionary(4, "dict", "typ_tbl")
 	Data.NAT = Dict.loadDictionary(0, "dict", "nat_dict")
 	Data.ABL = Dict.loadDictionary(0, "dict", "abil_dict")
 	Data.BST = Dict.loadDictionary(0, "dict", "bst_dict")
