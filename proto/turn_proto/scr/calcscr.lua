@@ -18,8 +18,13 @@ function Calc.getStat(stat, byt)
 	local EV = byt[stat.."_EV"]
 	local level = byt["LEVEL"]
 	local natBoost = 1
+	local res = 0
 	
-	res = math.floor(((math.floor((2 * base + IV + math.floor(EV/4)) * level)/100) + 5) * natBoost)
+	if stat == "HP" then
+		res = math.floor((2 * base + IV + math.floor(EV/4) * level)/100) + level + 10
+	else
+		res = math.floor(((math.floor((2 * base + IV + math.floor(EV/4)) * level)/100) + 5) * natBoost)
+	end
 	
 	return res
 end

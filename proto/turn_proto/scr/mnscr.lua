@@ -18,7 +18,8 @@ function Manager.getEnemyByt()	-- Get new Enemy Byt on Death
 		Manager.eByt = Data.ENM[nextID]
 		UI.update(Manager.pByt, Manager.eByt)
 	else
-		print("PLAYER WINS")
+		Manager.runEnd("player")
+		return
 	end
 end
 
@@ -200,6 +201,17 @@ function Manager.runTurn(event)	-- Run a standard turn
 end
 
 function Manager.forceSwitch()	-- Force the Player to switch Byts
+	local playerCheck = false
+	for i, byt in pairs(Data.PLY) do
+		if byt["CURR_HP"] > 0 then
+			playerCheck = true
+		end
+	end
+	if playerCheck == false then
+		Manager.runEnd("enemy")
+		return
+	end
+	
 	UI.state = "FIGHT"
 	Manager.switchMenu()
 	toggleFlag = false
@@ -260,14 +272,26 @@ function Manager.startBattle()	-- Run at start of Battle Scene
 	-- Load Data
 	Data.loadData()
 	Data.loadTeams(fileNumber, 1)
+	-- Pass Data
+	Calc.passData(Data.BYT, Data.TBL, Data.TYP, Data.MOV)
 	-- Load UI
 	Manager.pByt = Data.PLY[1]
 	Manager.eByt = Data.ENM[1]
 	UI.loadUI(Data.MOV, Data.BYT, Data.PLY, Data.ENM, Manager.pByt, Manager.eByt)
 	Manager.addEventListeners(UI.menu)
 	UI.toggleBtn:addEventListener("tap", Manager.switchMenu)
-	-- Pass Data
-	Calc.passData(Data.BYT, Data.TBL, Data.TYP, Data.MOV)
+	
+end
+
+function Manager.runEnd(winner)	-- Run the end of Battle
+	toggleFlag = false
+	inputFlag = false
+	
+	if winner == "player" then
+		print("PLAYER WINS")
+	else
+		print("ENEMY WINS")
+	end
 end
 
 return Manager

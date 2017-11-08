@@ -4,6 +4,7 @@
 -- User Interface functions
 -----------------------------------------------------------------------------------------
 local Asset = require "scr.ascr"
+local Calc = require "scr.calcscr"
 local UI = {}
 UI.state = "FIGHT"
 
@@ -45,7 +46,7 @@ function UI.loadMenuText(btn, ID)
 		local textString = ""
 		if byt ~= nil then
 			textString = byt["NAME"] .. "\n" ..
-			byt["CURR_HP"] .."/" .. UI.bytData[byt["ID"]]["HP"]
+			byt["CURR_HP"] .."/" .. Calc.getStat("HP", byt)
 		end
 		UI.loadText(btn, textString, 0, 0)
 		if byt ~= nil then
@@ -61,7 +62,7 @@ end
 function UI.loadShelfText(shelf)
 	local bytHeaderString = shelf.byt["NAME"] .. " - LV" .. shelf.byt["LEVEL"]
 	shelf.header = UI.loadText(shelf, bytHeaderString, -shelf.contentWidth/8, -shelf.contentHeight/2 - 8)
-	local healthString = shelf.byt["CURR_HP"] .. "/" .. UI.bytData[shelf.byt["ID"]]["HP"]
+	local healthString = shelf.byt["CURR_HP"] .. "/" .. Calc.getStat("HP", shelf.byt)
 	UI.loadText(shelf, healthString, 0, -8)
 end
 
@@ -81,8 +82,10 @@ function UI.setHealthBar(shelf)
 	else 
 		dir = -1
 	end
+	
 	shelf.health = Asset.loadSprite("hbar", shelf.dx, shelf.dy - 20, menuGroup)
-	shelf.health.hPcnt = shelf.byt["CURR_HP"] / UI.bytData[shelf.byt["ID"]]["HP"]
+	shelf.health.hPcnt = shelf.byt["CURR_HP"] / Calc.getStat("HP", shelf.byt)
+	
 	if shelf.health.hPcnt > 0 then
 		UI.moveHealthBar(shelf.health, dir)
 	else
@@ -109,8 +112,8 @@ function UI.loadShelves()
 	UI.loadShelfText(UI.pShelf)
 	-- Enemy Shelf
 	UI.eShelf = Asset.loadImage("eshlf", -80, -215, menuGroup)
-	UI.eShelf.id = "enemy"
 	UI.eShelf.byt = UI.eByt
+	UI.eShelf.id = "enemy"
 	UI.setHealthBar(UI.eShelf)
 	UI.loadShelfText(UI.eShelf)
 end
