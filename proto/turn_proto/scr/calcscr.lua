@@ -5,10 +5,29 @@
 -----------------------------------------------------------------------------------------
 local Calc = {}
 
-function Calc.passData(TBL, TYP, MOV)
+function Calc.passData(BYT, TBL, TYP, MOV)
+	Calc.BYT = BYT
 	Calc.TBL = TBL
 	Calc.TYP = TYP
 	Calc.MOV = MOV
+end
+
+function Calc.getStat(stat, byt)
+	local base = Calc.BYT[byt["ID"]][stat]
+	local IV = byt[stat]
+	local EV = byt[stat.."_EV"]
+	local level = byt["LEVEL"]
+	local natBoost = 1
+	
+	res = math.floor(((math.floor((2 * base + IV + math.floor(EV/4)) * level)/100) + 5) * natBoost)
+	
+	return res
+end
+
+function Calc.rollEffect(effect, chance)
+	local roll = math.random(0, 100)
+	if roll >= chance then return 0 end
+	return effect
 end
 
 function Calc.getTypeBonus(mTyp, tTyp)
@@ -49,12 +68,7 @@ function Calc.getModifier(uTyp1, uTyp2, mTyp, tTyp1, tTyp2)
 end
 
 function Calc.calculateDamage(level, power, attack, defense, mod)
-	print("lvl: " .. level)
-	print("pwr: " .. power)
-	print("atk: " .. attack)
-	print("def: " .. defense)
-	print("mod: " .. mod)
-	return ((((2 * level)/5 + 2) * power * (attack/defense))/ 50 + 2) * mod
+	return math.floor(((((2 * level)/5 + 2) * power * (attack/defense))/ 50 + 2) * mod)
 end
 
 return Calc

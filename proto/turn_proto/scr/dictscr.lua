@@ -23,11 +23,11 @@ function Dict.assignID(ct, dataID)
 		[8] = "SPATK", [9] = "SPDEF", [10] = "SPE",
 		[11] = "HP_EV", [12] = "ATK_EV",[13] = "DEF_EV",
 		[14] = "SPATK_EV", [15] = "SPDEF_EV", [16] = "SPE_EV",
-		[17] = "ABIL", [18] = "NAT", [19] = "CURR_HP",
-		[20] = "MOV1", [21] = "M1_U",
-		[22] = "MOV2", [23] = "M2_U",
-		[24] = "MOV3", [25] = "M3_U",
-		[26] = "MOV4", [27] = "M4_U"
+		[17] = "ABIL", [18] = "NAT", [19] = "CURR_HP", [20] = "CURR_EFT",
+		[21] = "MOV1", [22] = "M1_U",
+		[23] = "MOV2", [24] = "M2_U",
+		[25] = "MOV3", [26] = "M3_U",
+		[27] = "MOV4", [28] = "M4_U"
 	}
 	
 	local bytID_table = 

@@ -20,6 +20,7 @@ function UI.loadText(obj, textStr, dx, dy)
 	obj.text.x = obj.x + dx
 	obj.text.y = obj.y + dy
 	obj.text:setFillColor(0, 0, 0)
+	return obj.text
 end
 
 function UI.loadMenuText(btn, ID)
@@ -59,7 +60,7 @@ end
 
 function UI.loadShelfText(shelf)
 	local bytHeaderString = shelf.byt["NAME"] .. " - LV" .. shelf.byt["LEVEL"]
-	UI.loadText(shelf, bytHeaderString, -shelf.contentWidth/8, -shelf.contentHeight/2 - 8)
+	shelf.header = UI.loadText(shelf, bytHeaderString, -shelf.contentWidth/8, -shelf.contentHeight/2 - 8)
 	local healthString = shelf.byt["CURR_HP"] .. "/" .. UI.bytData[shelf.byt["ID"]]["HP"]
 	UI.loadText(shelf, healthString, 0, -8)
 end
@@ -79,7 +80,21 @@ function UI.setHealthBar(shelf)
 	end
 	shelf.health = Asset.loadSprite("hbar", shelf.dx, shelf.dy - 20, menuGroup)
 	shelf.health.hPcnt = shelf.byt["CURR_HP"] / UI.bytData[shelf.byt["ID"]]["HP"]
-	UI.moveHealthBar(shelf.health, dir)
+	if shelf.health.hPcnt > 0 then
+		UI.moveHealthBar(shelf.health, dir)
+	else
+		shelf.health:removeSelf()
+	end
+end
+
+function UI.clearShelves()
+	UI.pShelf.header:removeSelf()
+	UI.pShelf.text:removeSelf()
+	UI.pShelf:removeSelf()
+	
+	UI.eShelf.header:removeSelf()
+	UI.eShelf.text:removeSelf()
+	UI.eShelf:removeSelf()
 end
 
 function UI.loadShelves()
@@ -174,8 +189,11 @@ function UI.loadUI(movData, bytData, pData, eData, pByt, eByt)
 	UI.loadShelves()
 end
 
-function UI.update()
-	
+function UI.update(pByt, eByt)
+	UI.clearShelves()
+	UI.pByt = pByt
+	UI.eByt = eByt
+	UI.loadShelves()
 end
 
 return UI

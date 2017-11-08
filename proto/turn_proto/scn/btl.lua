@@ -9,6 +9,7 @@ local Manager = require "scr.mnscr"
 local scene = composer.newScene()
 
 function scene:create(event)
+	math.randomseed(os.time())
 	Manager.startBattle()
 end
 
