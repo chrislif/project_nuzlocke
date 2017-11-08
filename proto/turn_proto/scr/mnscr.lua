@@ -35,10 +35,15 @@ function Manager.getEnemyMove()	-- Get Enemy Move
 		}
 		
 		id = c_table[roll]
-		print(id)
 	end
 	
-	local mov = Data.MOV[id]
+	local mov = {
+		["typ"] = Data.MOV[id]["ATK_TYPE"],
+		["ID"] = id,
+		["TYPE"] = Data.MOV[id]["TYPE"],
+		["target"] = "player",
+		["speed"] = Manager.eByt["SPE"],
+	}
 	
 	return mov
 end
@@ -56,6 +61,7 @@ function Manager.getTarget(mov)	-- Get Target for a Move
 end
 
 function Manager.resolveMove(src, mov)	-- Resolve a Move
+	print("RESOLVE -----------------")
 	local target = Manager.getTarget(mov)
 	local mov = Data.MOV[mov["ID"]]
 	local damage = nil
@@ -67,9 +73,10 @@ function Manager.resolveMove(src, mov)	-- Resolve a Move
 	elseif src == Manager.pByt then
 		user = "Player"
 	end
-	
+		
 	if target == 0 then
 		target = Manager.pByt
+		
 		local mod = Calc.getModifier(Data.BYT[src["BYTID"]]["TYPE1"], Data.BYT[src["BYTID"]]["TYPE2"], mov["TYPE"], 
 										Data.BYT[target["BYTID"]]["TYPE1"], Data.BYT[target["BYTID"]]["TYPE2"])
 		local atk = nil
@@ -155,7 +162,7 @@ function Manager.runTurn(event)	-- Run a standard turn
 			pSpeed = Manager.pByt["SPE"]
 		end
 		local eMov = Manager.getEnemyMove()
-		eSpeed = Manager.eByt["SPE"]
+		eSpeed = eMov["speed"]
 		
 		-- Calculate Speeds
 		local firstMov = nil
