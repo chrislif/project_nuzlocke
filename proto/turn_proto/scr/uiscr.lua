@@ -68,6 +68,9 @@ end
 function UI.moveHealthBar(hbar, dir)
 	local eq = dir * math.floor(hbar.contentWidth/2 - (hbar.contentWidth * hbar.hPcnt)/2)
 	hbar.xScale = hbar.hPcnt
+	if hbar.xScale < 0.25 then
+		hbar:setSequence("low")
+	end
 	hbar.x = hbar.x + eq
 end
 

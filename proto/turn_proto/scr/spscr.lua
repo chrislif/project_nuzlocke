@@ -22,7 +22,7 @@ function Sprite.loadSpriteSheets()
 				x = 0,
 				y = 10,
 				width = 150,
-				height = 20,
+				height = 10,
 			},
 		},
 	}

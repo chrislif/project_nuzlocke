@@ -61,7 +61,6 @@ function Manager.getTarget(mov)	-- Get Target for a Move
 end
 
 function Manager.resolveMove(src, mov)	-- Resolve a Move
-	print("RESOLVE -----------------")
 	local target = Manager.getTarget(mov)
 	local mov = Data.MOV[mov["ID"]]
 	local damage = nil
