@@ -12,30 +12,28 @@ local ly = 0
 local endFlag = false
 local moveFlag = true
 
-function scene:create(event)
+function scene:create(event)	-- Load up first zone
 	Zone.loadZone("zone0")
 end
 
-function scene:show(event)
+function scene:show(event)	-- Unpause overworld out of battle
 	if event.phase == "will" then
-		print("LOAD")
 		Runtime:addEventListener("touch", scene.tapCheck)
 	end
 end
 
-function scene.allowMove(event)
+function scene.allowMove(event)	-- Allow movement
 	moveFlag = true
 end
 
-function scene.getEncounter()
+function scene.getEncounter()	-- Roll if there is an encounter
 	local roll = math.random(1, 100)
 	if roll > 60 then
-		print("FIGHT")
 		composer.gotoScene("scn.btl")
 	end
 end
 
-function scene.checkEncounter()
+function scene.checkEncounter()	-- Check if cell is an encounter cell
 	local c_table = {
 		[0] = 0,
 		[1] = 0,
@@ -48,7 +46,7 @@ function scene.checkEncounter()
 	if getEncounter > 0 then scene.getEncounter() end
 end
 
-function scene.getTapLocation()
+function scene.getTapLocation()	-- Get location of tap
 	if ly < display.contentHeight/4 then
 		return "up"
 	elseif ly > display.contentHeight * (3/4) then
@@ -61,7 +59,7 @@ function scene.getTapLocation()
 	return "center"
 end
 
-function scene.moveScene(event)
+function scene.moveScene(event)	-- Move screen if allowed
 	if endFlag == false then
 		if moveFlag == true then
 			moveFlag = false
@@ -75,8 +73,7 @@ function scene.moveScene(event)
 	end
 end
 
-function scene.tapCheck(event)
-	print("CHECK")
+function scene.tapCheck(event)	-- Detect screen tap v touch
 	local moveTime = nil
 	lx = event.x
 	ly = event.y
@@ -92,7 +89,7 @@ function scene.tapCheck(event)
 	return true
 end
 
-function scene:hide(event)
+function scene:hide(event)	-- Pause Overworld while in battle Mode
 	if event.phase == "will" then
 		Runtime:removeEventListener("touch", scene.tapCheck)
 	end

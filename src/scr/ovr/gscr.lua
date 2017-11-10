@@ -9,7 +9,7 @@ local File = require "scr.ovr.fscr"
 local Grid = {}
 Grid.mt = {}
 
-function Grid.new(a, b)
+function Grid.new(a, b)	-- Create a new grid
 	local grid = {}
 	setmetatable(grid, Grid.mt)
 	for i = 1, a do
@@ -21,7 +21,7 @@ function Grid.new(a, b)
 	return grid
 end
 
-function Grid.alterCell(zone, cell, id, n)
+function Grid.alterCell(zone, cell, id, n)	-- Appends to bottom of zone file to alter a Cell
 	cell[id] = n
 	cellString = tostring(cell.x) .. "." .. tostring(cell.y) .. "." .. tostring(cell.typ)
 	cellString = cellString .. "." .. tostring(cell.pas) .. "." .. tostring(cell.spn)
@@ -29,7 +29,7 @@ function Grid.alterCell(zone, cell, id, n)
 	return cell
 end
 
-function Grid.zoneToGrid(zone)
+function Grid.zoneToGrid(zone)	-- Translates zone file to 2D Grid
 	local zoneData = File.getZoneFile("fil/map/", zone)
 	local xsize = 0
 	local ysize = 0
@@ -75,7 +75,7 @@ function Grid.zoneToGrid(zone)
 	return zoneGrid
 end
 
-function Grid.tostring(grid)
+function Grid.tostring(grid)	-- If you can't figure out what this does there is no hope
 	local s = "{"
 	local sep = ""
 	local c = 0

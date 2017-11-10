@@ -20,7 +20,7 @@ local cellMap = {}
 local objMap = {}
 local player = nil
 
-function Zone.loadZone(zone)
+function Zone.loadZone(zone)	-- Load a zone from file
 	if #cellMap > 0 then
 		Asset.removeMap(cellMap)
 	end
@@ -31,7 +31,7 @@ function Zone.loadZone(zone)
 	player = Asset.drawPlayer()
 end
 
-function Zone.drawCells()
+function Zone.drawCells()	-- Draw, duh
 	for _, i in pairs(Zone.zoneGrid) do
 		for _, j in pairs(i) do
 			local xloc = tonumber(j.x) - zx
@@ -43,7 +43,7 @@ function Zone.drawCells()
 	end
 end
 
-function Zone.passableCell(x, y)
+function Zone.passableCell(x, y)	-- Check if character can walk into cell
 	local checkCell = Zone.zoneGrid[zx - x]
 	if checkCell ~= nil then
 		checkCell = checkCell[zy - y]
@@ -57,7 +57,7 @@ function Zone.passableCell(x, y)
 	return true
 end
 
-function Zone.moveZone(mdir)
+function Zone.moveZone(mdir)	-- Move the zone in response to user input
 	local xshift = 0
 	local yshift = 0
 	if mdir == "up" then

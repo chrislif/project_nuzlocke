@@ -9,7 +9,6 @@ local Manager = require "scr.btl.mnscr"
 local scene = composer.newScene()
 
 function scene:create(event)
-	print("START BATTLE")
 	math.randomseed(os.time())
 	Manager.startBattle()
 end

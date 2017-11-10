@@ -18,10 +18,11 @@ function Manager.runEnd(winner)	-- Run the end of Battle
 	inputFlag = false
 	
 	if winner == "player" then
-		print("PLAYER WINS")
+		
 		
 	else
-		print("ENEMY WINS")
+		
+		
 	end
 	
 	UI.remove()
@@ -201,8 +202,6 @@ function Manager.resolveMove(src, mov, movNum)	-- Resolve a Move
 		Manager.applyEffect(target, effect)
 	end
 	Manager.resolveEffects(2, src)
-	
-	print("")
 end
 	
 function Manager.applyDamage(target, damage)	-- Apply Damage to Target
@@ -312,7 +311,6 @@ function Manager.runTurn(event)	-- Run a standard turn
 		end
 		-- Run Standard Turn
 		print("RUN TURN --------------------------")
-		print("")
 		local pSpeed = 0
 		local eSpeed = 0
 		if src.data.typ == 0 then
@@ -378,7 +376,6 @@ end
 
 function Manager.addEventListeners(menu)	-- Normal Menu Listeners
 	for _, obj in pairs(menu) do
-		print(obj)
 		obj:addEventListener("tap", Manager.runTurn)
 	end
 end
