@@ -25,7 +25,7 @@ function File.getFile(dir, file)
 	local file, errorString = io.open(path, "r+")
 	
 	if not file then
-		print("File error: " .. errorString)
+		error("File error: " .. errorString)
 	else
 		return file
 	end
@@ -37,6 +37,7 @@ function File.getZoneFile(dir, zone)
 	
 	for line in file:lines() do
 		table.insert(zoneData, line)
+		
 	end
 	
 	io.close(file)

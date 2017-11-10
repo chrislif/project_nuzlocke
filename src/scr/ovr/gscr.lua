@@ -30,7 +30,7 @@ function Grid.alterCell(zone, cell, id, n)
 end
 
 function Grid.zoneToGrid(zone)
-	local zoneData = File.getZoneFile("/fil/map/", zone)
+	local zoneData = File.getZoneFile("fil/map/", zone)
 	local xsize = 0
 	local ysize = 0
 	
