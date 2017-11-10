@@ -186,12 +186,13 @@ function Manager.resolveMove(src, mov, movNum)	-- Resolve a Move
 		end
 		Manager.applyDamage(target, damage)
 		
-		if effect ~= 0 and target["CURR_EFT"] == 0 then
-			print("apply effect " .. effect .. " to " .. target["NAME"])
+		if effect ~= 10 then
+			if target["CURR_EFT"] == 0 then
+				print("apply effect " .. effect .. " to " .. target["NAME"])
+			end
+			src[movNum .. "_U"] = src[movNum .. "_U"] - 1
 		end
 		Manager.applyEffect(target, effect)
-	
-		src[movNum .. "_U"] = src[movNum .. "_U"] - 1
 	end
 	Manager.resolveEffects(2, src)
 	
@@ -300,7 +301,9 @@ function Manager.runTurn(event)	-- Run a standard turn
 	if inputFlag == false or src.data == nil then	-- Disable Input
 		return 
 	else
-		if Manager.pByt[src.data["move"] .. "_U"] < 1 then print("No uses of move left") return end
+		if src.data["move"] ~= nil then
+			if Manager.pByt[src.data["move"] .. "_U"] < 1 then print("No uses of move left") return end
+		end
 		-- Run Standard Turn
 		print("RUN TURN --------------------------")
 		print("")
@@ -357,6 +360,8 @@ function Manager.runTurn(event)	-- Run a standard turn
 			Manager.eByt["CURR_EFT"] = 0
 			Manager.getEnemyByt()
 		end
+		
+		UI.update(Manager.pByt, Manager.eByt)
 	end
 end
 
