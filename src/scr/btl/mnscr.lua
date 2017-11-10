@@ -3,12 +3,12 @@
 -- mnscr.lua
 -- Manager functions
 -----------------------------------------------------------------------------------------
+local composer = require "composer"
 local UI = require "scr.btl.uiscr"
 local Data = require "scr.btl.dscr"
 local Calc = require "scr.btl.calcscr"
 
 local Manager = {}
-Manager.endFlag = false
 local fileNumber = 1
 local inputFlag = true
 local toggleFlag = true
@@ -19,11 +19,14 @@ function Manager.runEnd(winner)	-- Run the end of Battle
 	
 	if winner == "player" then
 		print("PLAYER WINS")
-		Manager.endFlag = true
+		
 	else
 		print("ENEMY WINS")
-		Manager.endFlag = true
 	end
+	
+	UI.remove()
+	composer:gotoScene("scn.ovr")
+	composer.removeScene("scn.btl")
 end
 
 function Manager.getEnemyByt()	-- Get new Enemy Byt on Death
@@ -316,10 +319,10 @@ function Manager.runTurn(event)	-- Run a standard turn
 			if src.data["ID"] == Manager.pByt["ID"] then print("Byt is already out") return end
 			pSpeed = 1000
 		else
-			pSpeed = Manager.pByt["SPE"]
+			pSpeed = Calc.getStat("SPE", Manager.pByt)
 		end
 		local eMov = Manager.getEnemyMove()
-		eSpeed = eMov["speed"]
+		eSpeed = Calc.getStat("SPE", Manager.eByt)
 		
 		-- Calculate Speeds
 		local firstMov = nil
@@ -364,7 +367,6 @@ function Manager.runTurn(event)	-- Run a standard turn
 			Manager.getEnemyByt()
 		end
 		
-		UI.update(Manager.pByt, Manager.eByt)
 	end
 end
 
@@ -376,6 +378,7 @@ end
 
 function Manager.addEventListeners(menu)	-- Normal Menu Listeners
 	for _, obj in pairs(menu) do
+		print(obj)
 		obj:addEventListener("tap", Manager.runTurn)
 	end
 end
@@ -401,6 +404,8 @@ function Manager.switchMenu()	-- Switch Menu between Fight and Team
 end
 
 function Manager.startBattle()	-- Run at start of Battle Scene
+	inputFlag = true
+	toggleFlag = true
 	-- Load Data
 	Data.loadData()
 	Data.loadTeams(fileNumber, 1)
@@ -410,7 +415,10 @@ function Manager.startBattle()	-- Run at start of Battle Scene
 	UI.loadUI(Manager.pByt, Manager.eByt)
 	UI.toggleBtn:addEventListener("tap", Manager.switchMenu)
 	Manager.addEventListeners(UI.menu)
-	
+end
+
+function Manager.exitScene(event)
+	UI.remove()
 end
 
 return Manager

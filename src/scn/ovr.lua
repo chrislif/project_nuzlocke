@@ -16,6 +16,13 @@ function scene:create(event)
 	Zone.loadZone("zone0")
 end
 
+function scene:show(event)
+	if event.phase == "will" then
+		print("LOAD")
+		Runtime:addEventListener("touch", scene.tapCheck)
+	end
+end
+
 function scene.allowMove(event)
 	moveFlag = true
 end
@@ -69,6 +76,7 @@ function scene.moveScene(event)
 end
 
 function scene.tapCheck(event)
+	print("CHECK")
 	local moveTime = nil
 	lx = event.x
 	ly = event.y
@@ -84,7 +92,14 @@ function scene.tapCheck(event)
 	return true
 end
 
-Runtime:addEventListener("touch", scene.tapCheck)
+function scene:hide(event)
+	if event.phase == "will" then
+		Runtime:removeEventListener("touch", scene.tapCheck)
+	end
+end
+
 scene:addEventListener("create", scene)
+scene:addEventListener("show", scene)
+scene:addEventListener("hide", scene)
 
 return scene

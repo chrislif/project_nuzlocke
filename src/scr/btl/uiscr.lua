@@ -10,11 +10,9 @@ local Data = require "scr.btl.dscr"
 local UI = {}
 UI.state = "FIGHT"
 
-local backGroup = display.newGroup()
-local menuGroup = display.newGroup()
-
 function UI.loadText(obj, textStr, dx, dy)
 	local textOptions = {
+		parent = UI.menuGroup,
 		text = textStr,
 		fontSize = 15,
 		align = "center"
@@ -86,7 +84,7 @@ function UI.setHealthBar(shelf)
 		dir = -1
 	end
 	
-	shelf.health = Asset.loadSprite("hbar", shelf.dx, shelf.dy - 20, menuGroup)
+	shelf.health = Asset.loadSprite("hbar", shelf.dx, shelf.dy - 20, UI.menuGroup)
 	shelf.health.hPcnt = shelf.byt["CURR_HP"] / Calc.getStat("HP", shelf.byt)
 	
 	if shelf.health.hPcnt > 0 then
@@ -108,37 +106,53 @@ function UI.setStatus(shelf)
 		[5] = "slp",
 	}
 	if c_table[shelf.byt["CURR_EFT"]] ~= nil then
-		shelf.status = Asset.loadImage(c_table[shelf.byt["CURR_EFT"]] .. "_lb", shelf.dx + 60, shelf.dy - 40, menuGroup)
+		shelf.status = Asset.loadImage(c_table[shelf.byt["CURR_EFT"]] .. "_lb", shelf.dx + 60, shelf.dy - 40, UI.menuGroup)
 	end
 end
 
 function UI.clearShelves()
-	UI.pShelf.header:removeSelf()
-	UI.pShelf.text:removeSelf()
-	UI.pShelf:removeSelf()
-	if UI.pShelf.status ~= nil then
-		UI.pShelf.status:removeSelf()
+	if UI.pShelf ~= nil then
+		UI.pShelf.header:removeSelf()
+		UI.pShelf.header = nil
+		UI.pShelf.text:removeSelf()
+		UI.pShelf.text = nil	
+		if UI.pShelf.status ~= nil then
+			UI.pShelf.status:removeSelf()
+			UI.pShelf.status = nil
+		end
+		UI.pShelf.health:removeSelf()
+		UI.pShelf.health = nil
+		UI.pShelf:removeSelf()
+		UI.pShelf = nil
 	end
 	
-	
-	UI.eShelf.header:removeSelf()
-	UI.eShelf.text:removeSelf()
-	UI.eShelf:removeSelf()
-	if UI.eShelf.status ~= nil then
-		UI.eShelf.status:removeSelf()
+	if UI.eShelf ~= nil then
+		UI.eShelf.header:removeSelf()
+		UI.eShelf.header = nil
+		UI.eShelf.text:removeSelf()
+		UI.eShelf.text = nil
+		if UI.eShelf.status ~= nil then
+			UI.eShelf.status:removeSelf()
+			UI.eShelf.status = nil
+		end
+		UI.eShelf.health:removeSelf()
+		UI.eShelf.health = nil
+		UI.eShelf:removeSelf()
+		UI.eShelf = nil
 	end
 end
 
 function UI.loadShelves()
 	-- Player Shelf
-	UI.pShelf = Asset.loadImage("pshlf", 80, 105, menuGroup)
+	UI.pShelf = Asset.loadImage("pshlf", 80, 105, UI.menuGroup)
 	UI.pShelf.byt = UI.pByt
 	UI.pShelf.id = "player"
 	UI.setHealthBar(UI.pShelf)
 	UI.loadShelfText(UI.pShelf)
 	UI.setStatus(UI.pShelf)
+	
 	-- Enemy Shelf
-	UI.eShelf = Asset.loadImage("eshlf", -80, -215, menuGroup)
+	UI.eShelf = Asset.loadImage("eshlf", -80, -215, UI.menuGroup)
 	UI.eShelf.byt = UI.eByt
 	UI.eShelf.id = "enemy"
 	UI.setHealthBar(UI.eShelf)
@@ -146,17 +160,22 @@ function UI.loadShelves()
 	UI.setStatus(UI.eShelf)
 end
 
+function UI.removeToggleBtn()
+	UI.toggleBtn.text:removeSelf()
+	UI.toggleBtn:removeSelf()
+end
+
 function UI.loadToggleBtn()
-	UI.toggleBtn = Asset.loadImage("btn_6", 120, 175, menuGroup)
+	UI.toggleBtn = Asset.loadImage("btn_6", 120, 175, UI.menuGroup)
 	UI.loadText(UI.toggleBtn, "TEAM", 0, 0)
 end
 
 function UI.load4BtnMenu()
 	local btns = {
-	[1] = Asset.loadImage("btn_4", -100, 175, menuGroup),
-	[2] = Asset.loadImage("btn_4", 20, 175, menuGroup),
-	[3] = Asset.loadImage("btn_4", -100, 235, menuGroup),
-	[4] = Asset.loadImage("btn_4", 20, 235, menuGroup),
+	[1] = Asset.loadImage("btn_4", -100, 175, UI.menuGroup),
+	[2] = Asset.loadImage("btn_4", 20, 175, UI.menuGroup),
+	[3] = Asset.loadImage("btn_4", -100, 235, UI.menuGroup),
+	[4] = Asset.loadImage("btn_4", 20, 235, UI.menuGroup),
 	}
 	for ID, btn in pairs(btns) do
 		UI.loadMenuText(btn, ID)
@@ -166,12 +185,12 @@ end
 
 function UI.load6BtnMenu()
 	local btns = {
-	[1] = Asset.loadImage("btn_6", -120, 175, menuGroup),
-	[2] = Asset.loadImage("btn_6", -40, 175, menuGroup),
-	[3] = Asset.loadImage("btn_6", 40, 175, menuGroup),
-	[4] = Asset.loadImage("btn_6", -120, 235, menuGroup),
-	[5] = Asset.loadImage("btn_6", -40, 235, menuGroup),
-	[6] = Asset.loadImage("btn_6", 40, 235, menuGroup),
+	[1] = Asset.loadImage("btn_6", -120, 175, UI.menuGroup),
+	[2] = Asset.loadImage("btn_6", -40, 175, UI.menuGroup),
+	[3] = Asset.loadImage("btn_6", 40, 175, UI.menuGroup),
+	[4] = Asset.loadImage("btn_6", -120, 235, UI.menuGroup),
+	[5] = Asset.loadImage("btn_6", -40, 235, UI.menuGroup),
+	[6] = Asset.loadImage("btn_6", 40, 235, UI.menuGroup),
 	}
 	for ID, btn in pairs(btns) do
 		UI.loadMenuText(btn, ID)
@@ -187,6 +206,9 @@ function UI.clearMenu()
 			obj = nil
 		end
 	end
+	if UI.runBtn ~= nil then
+		UI.runBtn:removeSelf()
+	end
 end
 
 function UI.loadMenu(state)
@@ -197,16 +219,23 @@ function UI.loadMenu(state)
 	else
 		menu = UI.load4BtnMenu()
 	end
-	UI.runBtn = Asset.loadImage("btn_6", 120, 235, menuGroup)
+	UI.runBtn = Asset.loadImage("btn_6", 120, 235, UI.menuGroup)
 	UI.runBtn:setFillColor(1, 0, 0)
 	UI.menu = menu
 end
 
 function UI.loadBackground()
-	UI.background = Asset.loadImage("back", 0, 0, backGroup)
+	UI.background = Asset.loadImage("back", 0, 0, UI.backGroup)
 end
 
 function UI.loadUI(pByt, eByt)
+	if UI.backGroup == nil then
+		UI.backGroup = display.newGroup()
+	end
+	if UI.menuGroup == nil then
+		UI.menuGroup = display.newGroup()
+	end
+
 	UI.pByt = pByt
 	UI.eByt = eByt
 	
@@ -222,6 +251,21 @@ function UI.update(pByt, eByt)
 	UI.pByt = pByt
 	UI.eByt = eByt
 	UI.loadShelves()
+end
+
+function UI.remove()
+	-- UI.clearShelves()
+	-- UI.background:removeSelf()
+	-- UI.clearMenu()
+	-- UI.removeToggleBtn()
+	-- UI.runBtn:removeSelf()
+	UI.backGroup:removeSelf()
+	UI.backGroup = nil
+	UI.menuGroup:removeSelf()
+	UI.menuGroup = nil
+	UI.menu = nil
+	UI.toggleBtn = nil
+	UI.runBtn = nil
 end
 
 return UI
