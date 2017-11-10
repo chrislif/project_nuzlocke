@@ -5,6 +5,8 @@
 -----------------------------------------------------------------------------------------
 local Asset = require "scr.ascr"
 local Calc = require "scr.calcscr"
+local Data = require "scr.dscr"
+
 local UI = {}
 UI.state = "FIGHT"
 
@@ -30,19 +32,20 @@ function UI.loadMenuText(btn, ID)
 		local movUses = UI.pByt["M" .. ID .. "_U"]
 		local textString = ""
 		if movID ~= 0 then
-			textString = UI.movData[movID]["NAME"] .. "\n" .. 
-			movUses .. " / " .. UI.movData[movID]["USES"]
+			textString = Data.MOV[movID]["NAME"] .. "\n" .. 
+			movUses .. " / " .. Data.MOV[movID]["USES"]
 		end
 		UI.loadText(btn, textString, 0, 0)
 		if movID ~= 0 then
 			btn.data = {
 				["typ"] = 1,
 				["ID"] = movID,
-				["target"] = "enemy"
+				["move"] = "M" .. ID,
+				["target"] = "enemy",
 			}
 		end
 	elseif UI.state == "TEAM" then
-		local byt = UI.pData[ID]
+		local byt = Data.PLY[ID]
 		local textString = ""
 		if byt ~= nil then
 			textString = byt["NAME"] .. "\n" ..
@@ -93,14 +96,37 @@ function UI.setHealthBar(shelf)
 	end
 end
 
+function UI.setStatus(shelf)
+	shelf.status = nil
+	
+	local c_table = {
+		[0] = nil,
+		[1] = "brn",
+		[2] = "psn",
+		[3] = "stn",
+		[4] = "frz",
+		[5] = "slp",
+	}
+	if c_table[shelf.byt["CURR_EFT"]] ~= nil then
+		shelf.status = Asset.loadImage(c_table[shelf.byt["CURR_EFT"]] .. "_lb", shelf.dx + 60, shelf.dy - 40, menuGroup)
+	end
+end
+
 function UI.clearShelves()
 	UI.pShelf.header:removeSelf()
 	UI.pShelf.text:removeSelf()
 	UI.pShelf:removeSelf()
+	if UI.pShelf.status ~= nil then
+		UI.pShelf.status:removeSelf()
+	end
+	
 	
 	UI.eShelf.header:removeSelf()
 	UI.eShelf.text:removeSelf()
 	UI.eShelf:removeSelf()
+	if UI.eShelf.status ~= nil then
+		UI.eShelf.status:removeSelf()
+	end
 end
 
 function UI.loadShelves()
@@ -110,19 +136,20 @@ function UI.loadShelves()
 	UI.pShelf.id = "player"
 	UI.setHealthBar(UI.pShelf)
 	UI.loadShelfText(UI.pShelf)
+	UI.setStatus(UI.pShelf)
 	-- Enemy Shelf
 	UI.eShelf = Asset.loadImage("eshlf", -80, -215, menuGroup)
 	UI.eShelf.byt = UI.eByt
 	UI.eShelf.id = "enemy"
 	UI.setHealthBar(UI.eShelf)
 	UI.loadShelfText(UI.eShelf)
+	UI.setStatus(UI.eShelf)
 end
 
 function UI.loadToggleBtn()
 	UI.toggleBtn = Asset.loadImage("btn_6", 120, 175, menuGroup)
 	UI.loadText(UI.toggleBtn, "TEAM", 0, 0)
 end
-
 
 function UI.load4BtnMenu()
 	local btns = {
@@ -179,12 +206,7 @@ function UI.loadBackground()
 	UI.background = Asset.loadImage("back", 0, 0, backGroup)
 end
 
-function UI.loadUI(movData, bytData, pData, eData, pByt, eByt)
-	-- Pass Data
-	UI.eData = eData
-	UI.pData = pData
-	UI.bytData = bytData
-	UI.movData = movData
+function UI.loadUI(pByt, eByt)
 	UI.pByt = pByt
 	UI.eByt = eByt
 	
