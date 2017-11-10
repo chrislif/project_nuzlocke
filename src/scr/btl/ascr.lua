@@ -3,7 +3,7 @@
 -- ascr.lua
 -- Asset functions
 -----------------------------------------------------------------------------------------
-local Sprite = require "scr.spscr"
+local Sprite = require "scr.btl.spscr"
 local Asset = {}
 
 function Asset.loadData()

@@ -3,7 +3,7 @@
 -- dictscr.lua
 -- Standard Dictionary functions
 -----------------------------------------------------------------------------------------
-local File = require "scr.fscr"
+local File = require "scr.btl.fscr"
 
 local Dict = {}
 

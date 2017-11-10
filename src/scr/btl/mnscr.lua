@@ -3,11 +3,12 @@
 -- mnscr.lua
 -- Manager functions
 -----------------------------------------------------------------------------------------
-local UI = require "scr.uiscr"
-local Data = require "scr.dscr"
-local Calc = require "scr.calcscr"
+local UI = require "scr.btl.uiscr"
+local Data = require "scr.btl.dscr"
+local Calc = require "scr.btl.calcscr"
 
 local Manager = {}
+Manager.endFlag = false
 local fileNumber = 1
 local inputFlag = true
 local toggleFlag = true
@@ -18,8 +19,10 @@ function Manager.runEnd(winner)	-- Run the end of Battle
 	
 	if winner == "player" then
 		print("PLAYER WINS")
+		Manager.endFlag = true
 	else
 		print("ENEMY WINS")
+		Manager.endFlag = true
 	end
 end
 

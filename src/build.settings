@@ -35,15 +35,15 @@ settings =
 			UILaunchStoryboardName = "LaunchScreen",
 			CFBundleIconFiles =
 			{
-				"ico/Icon-40.png",
-				"ico/Icon-58.png",
-				"ico/Icon-76.png",
-				"ico/Icon-80.png",
-				"ico/Icon-87.png",
-				"ico/Icon-120.png",
-				"ico/Icon-152.png",
-				"ico/Icon-167.png",
-				"ico/Icon-180.png",
+				"Icon-40.png",
+				"Icon-58.png",
+				"Icon-76.png",
+				"Icon-80.png",
+				"Icon-87.png",
+				"Icon-120.png",
+				"Icon-152.png",
+				"Icon-167.png",
+				"Icon-180.png",
 			},
 		},
 	},
@@ -62,7 +62,7 @@ settings =
 	excludeFiles =
 	{
 		-- Exclude unnecessary files for each platform
-		ios = { "ico/Icon.png", "ico/Icon-*dpi.png", },
-		android = { "ico/Icon.png", "ico/Icon-??.png", "ico/Icon-???.png", "LaunchScreen.storyboardc", },
+		ios = { "Icon.png", "Icon-*dpi.png", },
+		android = { "Icon.png", "Icon-??.png", "Icon-???.png", "LaunchScreen.storyboardc", },
 	},
 }

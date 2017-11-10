@@ -3,9 +3,9 @@
 -- uiscr.lua
 -- User Interface functions
 -----------------------------------------------------------------------------------------
-local Asset = require "scr.ascr"
-local Calc = require "scr.calcscr"
-local Data = require "scr.dscr"
+local Asset = require "scr.btl.ascr"
+local Calc = require "scr.btl.calcscr"
+local Data = require "scr.btl.dscr"
 
 local UI = {}
 UI.state = "FIGHT"

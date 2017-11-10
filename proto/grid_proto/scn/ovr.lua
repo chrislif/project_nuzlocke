@@ -23,7 +23,7 @@ end
 function scene.getEncounter()
 	local roll = math.random(1, 100)
 	if roll > 60 then
-		print("FIGHT")
+		composer:gotoScene("scn.btl")
 	end
 end
 

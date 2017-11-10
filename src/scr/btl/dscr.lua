@@ -3,7 +3,7 @@
 -- dscr.lua
 -- Data functions
 -----------------------------------------------------------------------------------------
-local Dict = require "scr.dictscr"
+local Dict = require "scr.btl.dictscr"
 
 local Data = {}
 
