@@ -5,21 +5,18 @@
 -----------------------------------------------------------------------------------------
 local composer = require "composer"
 local Zone = require "scr.ovr.zscr"
+local Menu = require "scr.ovr.mnscr"
 
 local scene = composer.newScene()
 local lx = 0
 local ly = 0
 local endFlag = false
 local moveFlag = true
+local menuFlag = false
 
 function scene:create(event)	-- Load up first zone
 	Zone.loadZone("zone0")
-end
-
-function scene:show(event)	-- Unpause overworld out of battle
-	if event.phase == "will" then
-		Runtime:addEventListener("touch", scene.tapCheck)
-	end
+	Menu.load()
 end
 
 function scene.allowMove(event)	-- Allow movement
@@ -73,13 +70,39 @@ function scene.moveScene(event)	-- Move screen if allowed
 	end
 end
 
+function scene.checkMenuTap(event)
+	local width = Menu.menuBtn.contentWidth
+	local height = Menu.menuBtn.contentHeight
+	
+	local xMinCheck = Menu.menuBtn.x - width/2
+	local xMaxCheck = Menu.menuBtn.x + width/2
+	local yMinCheck = Menu.menuBtn.y - height/2
+	local yMaxCheck = Menu.menuBtn.y + height/2
+	
+	if event.x >= xMinCheck and event.x <= xMaxCheck then
+		if event.y >= yMinCheck and event.y <= yMaxCheck then
+			return true
+		end
+	end
+	return false
+end
+
 function scene.tapCheck(event)	-- Detect screen tap v touch
 	local moveTime = nil
 	lx = event.x
 	ly = event.y
 	if event.phase == "began" then
-		endFlag = false
-		timer.performWithDelay(16, scene.moveScene, -1)
+		if menuFlag == false then
+			if scene.checkMenuTap(event) then
+				scene.toggleMenu(event)
+			else
+				endFlag = false
+				timer.performWithDelay(16, scene.moveScene, -1)
+			end
+		else
+			endFlag = false
+			timer.performWithDelay(16, scene.moveScene, -1)
+		end
 	elseif event.phase == "moved" then
 		lx = event.x
 		ly = event.y
@@ -87,6 +110,22 @@ function scene.tapCheck(event)	-- Detect screen tap v touch
 		endFlag = true
 	end
 	return true
+end
+
+function scene.toggleMenu(event)
+	if Menu.state == "hide" then
+		moveFlag = false
+	else
+		moveFlag = true
+	end
+	Menu.toggle()
+	
+end
+
+function scene:show(event)	-- Unpause overworld out of battle
+	if event.phase == "will" then
+		Runtime:addEventListener("touch", scene.tapCheck)
+	end
 end
 
 function scene:hide(event)	-- Pause Overworld while in battle Mode

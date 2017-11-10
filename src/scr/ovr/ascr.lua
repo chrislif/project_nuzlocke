@@ -22,6 +22,15 @@ sprTable[0] = "box.png"
 
 local player = nil
 
+function Asset.drawMenu(img, dx, dy)
+	local img = display.newImage("ast/" .. img .. ".png")
+	
+	img.x = display.contentCenterX + dx
+	img.y = display.contentCenterY + dy
+	
+	return img
+end
+
 function Asset.drawCell(cell, dx, dy)
 	local img = imgTable[cell.typ]
 
