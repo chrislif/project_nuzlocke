@@ -10,11 +10,13 @@ local cellSize = 32
 
 local spriteSheetTable = Sprite.loadSpriteSheets()
 
-local imgTable = {}
-imgTable[0] = "bar.png"
-imgTable[1] = "grs.png"
-imgTable[2] = "snd.png"
-imgTable[3] = "wtr.png"
+local imgTable = {
+	[0] = "bar.png",
+	[1] = "grs.png",
+	[2] = "snd.png",
+	[3] = "wtr.png",
+	[4] = "tgrs.png",
+}
 
 local sprTable = {}
 sprTable[0] = "box.png"

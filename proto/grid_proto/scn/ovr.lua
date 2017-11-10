@@ -20,6 +20,26 @@ function scene.allowMove(event)
 	moveFlag = true
 end
 
+function scene.getEncounter()
+	local roll = math.random(1, 100)
+	if roll > 60 then
+		print("FIGHT")
+	end
+end
+
+function scene.checkEncounter()
+	local c_table = {
+		[0] = 0,
+		[1] = 0,
+		[2] = 0,
+		[3] = 0,
+		[4] = 1,
+	}
+
+	local getEncounter = c_table[Zone.zoneGrid[Zone.currentCell.x][Zone.currentCell.y].typ]
+	if getEncounter > 0 then scene.getEncounter() end
+end
+
 function scene.getTapLocation()
 	if ly < display.contentHeight/4 then
 		return "up"
@@ -39,7 +59,8 @@ function scene.moveScene(event)
 			moveFlag = false
 			timer.performWithDelay(400, scene.allowMove)
 			local mdir = scene.getTapLocation()
-			Zone.moveZone(mdir)
+			local encounterFlag = Zone.moveZone(mdir)
+			if encounterFlag and mdir ~= "center" then timer.performWithDelay(400, scene.checkEncounter) end
 		end
 	elseif endFlag == true then
 		timer.cancel(event.source)

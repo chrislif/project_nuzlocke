@@ -7,9 +7,12 @@ local Grid = require "scr.gscr"
 local Asset = require "scr.ascr"
 
 local Zone = {}
+Zone.currentCell = {}
+Zone.currentCell.x = 1
+Zone.currentCell.y = 1
+Zone.zoneGrid = nil
 
 local zoneName = nil
-local zoneGrid = nil
 local zx = 1
 local zy = 1
 local cellSize = 32
@@ -22,14 +25,14 @@ function Zone.loadZone(zone)
 		Asset.removeMap(cellMap)
 	end
 	zoneName = zone
-	zoneGrid = Grid.zoneToGrid(zone)
+	Zone.zoneGrid = Grid.zoneToGrid(zone)
 	Zone.drawCells()
 	Zone.spawnObjects()
 	player = Asset.drawPlayer()
 end
 
 function Zone.drawCells()
-	for _, i in pairs(zoneGrid) do
+	for _, i in pairs(Zone.zoneGrid) do
 		for _, j in pairs(i) do
 			local xloc = tonumber(j.x) - zx
 			local yloc = tonumber(j.y) - zy
@@ -41,7 +44,7 @@ function Zone.drawCells()
 end
 
 function Zone.passableCell(x, y)
-	local checkCell = zoneGrid[zx - x]
+	local checkCell = Zone.zoneGrid[zx - x]
 	if checkCell ~= nil then
 		checkCell = checkCell[zy - y]
 	end
@@ -78,11 +81,15 @@ function Zone.moveZone(mdir)
 		Asset.playerAnimate(mdir)
 		zx = zx - xshift
 		zy = zy - yshift
+		Zone.currentCell.x = zx
+		Zone.currentCell.y = zy
+		return true
 	end
+	return false
 end
 
 function Zone.spawnObjects()
-	for _, i in pairs(zoneGrid) do
+	for _, i in pairs(Zone.zoneGrid) do
 		for _, j in pairs(i) do
 			if j.spn > 0 then
 				local newObj = Asset.drawObj(tonumber(j.x) - zx, tonumber(j.y) - zy)
@@ -93,8 +100,8 @@ function Zone.spawnObjects()
 end
 
 function Zone.printCurrent()
-	if zoneGrid ~= nil then
-		Grid.print(zoneGrid)
+	if Zone.zoneGrid ~= nil then
+		Grid.print(Zone.zoneGrid)
 	end
 end
 

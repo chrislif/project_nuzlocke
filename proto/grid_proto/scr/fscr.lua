@@ -56,8 +56,6 @@ function File.alterZoneFile(file, cellString)
 		path = path .. "/map/" .. file .. ".txt"
 	end
 	
-	
-	
 	local infile = io.open(path, "r")
 	io.input(infile)
 	local instr = io.read("*a")
