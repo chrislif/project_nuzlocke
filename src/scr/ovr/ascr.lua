@@ -22,9 +22,39 @@ sprTable[0] = "box.png"
 
 local player = nil
 
+function Asset.drawText(str, dx, dy)
+	local text = display.newText({text = str, fontSize = 15})
+	text.x = display.contentCenterX + dx
+	text.y = display.contentCenterY + dy
+	text:setFillColor(0, 0, 0)
+	return text
+end
+
+function Asset.drawGroupText(group, str, dx, dy)
+	local text = display.newText({parent = group, text = str, fontSize = 15})
+	
+	text.x = display.contentCenterX + dx
+	text.y = display.contentCenterY + dy
+	text:setFillColor(0, 0, 0)
+	return text
+end
+
+function Asset.drawImage(group, img, dx, dy)
+	local newImg = display.newImage(group, "ast/" .. img .. ".png")
+	
+	newImg.dx = dx
+	newImg.dy = dy
+	newImg.x = display.contentCenterX + dx
+	newImg.y = display.contentCenterY + dy
+	
+	return newImg
+end
+
 function Asset.drawMenu(img, dx, dy)
 	local img = display.newImage("ast/" .. img .. ".png")
 	
+	img.dx = dx
+	img.dy = dy
 	img.x = display.contentCenterX + dx
 	img.y = display.contentCenterY + dy
 	

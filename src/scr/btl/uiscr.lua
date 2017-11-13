@@ -91,6 +91,7 @@ function UI.setHealthBar(shelf)
 		UI.moveHealthBar(shelf.health, dir)
 	else
 		shelf.health:removeSelf()
+		shelf.health = nil
 	end
 end
 
@@ -120,8 +121,10 @@ function UI.clearShelves()
 			UI.pShelf.status:removeSelf()
 			UI.pShelf.status = nil
 		end
-		UI.pShelf.health:removeSelf()
-		UI.pShelf.health = nil
+		if UI.pShelf.health ~= nil then
+			UI.pShelf.health:removeSelf()
+			UI.pShelf.health = nil
+		end
 		UI.pShelf:removeSelf()
 		UI.pShelf = nil
 	end
@@ -135,8 +138,10 @@ function UI.clearShelves()
 			UI.eShelf.status:removeSelf()
 			UI.eShelf.status = nil
 		end
-		UI.eShelf.health:removeSelf()
-		UI.eShelf.health = nil
+		if UI.eShelf.health ~= nil then
+			UI.eShelf.health:removeSelf()
+			UI.eShelf.health = nil
+		end
 		UI.eShelf:removeSelf()
 		UI.eShelf = nil
 	end
@@ -254,11 +259,6 @@ function UI.update(pByt, eByt)
 end
 
 function UI.remove()
-	-- UI.clearShelves()
-	-- UI.background:removeSelf()
-	-- UI.clearMenu()
-	-- UI.removeToggleBtn()
-	-- UI.runBtn:removeSelf()
 	UI.backGroup:removeSelf()
 	UI.backGroup = nil
 	UI.menuGroup:removeSelf()

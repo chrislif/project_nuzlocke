@@ -138,4 +138,11 @@ scene:addEventListener("create", scene)
 scene:addEventListener("show", scene)
 scene:addEventListener("hide", scene)
 
+function showMem()
+	print("mem " .. collectgarbage("count"))
+	
+end
+
+--Runtime:addEventListener("enterFrame", showMem)
+
 return scene
