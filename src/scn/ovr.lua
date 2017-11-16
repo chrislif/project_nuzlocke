@@ -12,7 +12,6 @@ local lx = 0
 local ly = 0
 local endFlag = false
 local moveFlag = true
-local menuFlag = false
 
 function scene:create(event)	-- Load up first zone
 	Zone.loadZone("zone0")
@@ -92,13 +91,8 @@ function scene.tapCheck(event)	-- Detect screen tap v touch
 	lx = event.x
 	ly = event.y
 	if event.phase == "began" then
-		if menuFlag == false then
-			if scene.checkMenuTap(event) then
-				scene.toggleMenu(event)
-			else
-				endFlag = false
-				timer.performWithDelay(16, scene.moveScene, -1)
-			end
+		if scene.checkMenuTap(event) then
+			scene.toggleMenu(event)
 		else
 			endFlag = false
 			timer.performWithDelay(16, scene.moveScene, -1)
@@ -108,6 +102,9 @@ function scene.tapCheck(event)	-- Detect screen tap v touch
 		ly = event.y
 	elseif event.phase == "ended" then
 		endFlag = true
+		-- if scene.checkMenuTap(event) == false then
+			-- scene.toggleMenu(event)
+		-- end
 	end
 	return true
 end
@@ -119,7 +116,6 @@ function scene.toggleMenu(event)
 		moveFlag = true
 	end
 	Menu.toggle()
-	
 end
 
 function scene:show(event)	-- Unpause overworld out of battle
@@ -138,11 +134,12 @@ scene:addEventListener("create", scene)
 scene:addEventListener("show", scene)
 scene:addEventListener("hide", scene)
 
-function showMem()
-	print("mem " .. collectgarbage("count"))
+-- Check for mem leaks
+-- function showMem()
+	-- print("mem " .. collectgarbage("count"))
 	
-end
+-- end
 
---Runtime:addEventListener("enterFrame", showMem)
+-- --Runtime:addEventListener("enterFrame", showMem)
 
 return scene

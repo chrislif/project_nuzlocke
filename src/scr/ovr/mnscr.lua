@@ -14,18 +14,20 @@ local Menu = {}
 Menu.menuBtn = nil
 Menu.state = "hide"
 Menu.menu = nil
+local menuFlag = true
 
 function Menu.load()
 	Menu.menuBtn = Asset.drawMenu("mnu", display.contentWidth/2 - 30, display.contentHeight/2)
 end
 
-function Menu.toggle(event)
-	if Menu.state == "hide" then
-		Menu.show()
-	else
-		Menu.hide()
+function Menu.toggle()
+	if menuFlag == true then
+		if Menu.state == "hide" then
+			Menu.show()
+		else
+			Menu.hide()
+		end
 	end
-	
 end
 
 function Menu.hide(event)
@@ -40,19 +42,35 @@ function Menu.hide(event)
 	Menu.menu = nil
 end
 
-function Menu.activateMenu(event)
-	local self = event.target
+function Menu.exit(event)
+	if event.phase == "began" then
+		menuGroup:removeSelf()
+		menuGroup = nil
+		menuGroup = display.newGroup()
+	end
 	
-	if self.id == 0 then
-		oMenu.load()
-	elseif self.id == 1 then
-		jMenu.load()
-	elseif self.id == 2 then
-		iMenu.load()
-	elseif self.id == 3 then
-		bMenu.load()
-	elseif self.id == 4 then
-		tMenu.load()
+	menuFlag = true
+end
+
+function Menu.chooseMenu(event)
+	if event.phase == "began" then
+		local menuBtn = nil
+		if menuFlag == true then
+			local self = event.target
+			if self.id == 0 then
+				menuBtn = oMenu.load()
+			elseif self.id == 1 then
+				menuBtn = jMenu.load()
+			elseif self.id == 2 then
+				menuBtn = iMenu.load()
+			elseif self.id == 3 then
+				menuBtn = bMenu.load()
+			elseif self.id == 4 then
+				menuBtn = tMenu.load()
+			end	
+			menuBtn:addEventListener("touch", Menu.exit)
+		end
+		menuFlag = false
 	end
 end
 
@@ -74,7 +92,7 @@ function Menu.drawMenu()
 	for i, obj in pairs(Menu.menu) do
 		obj.text = Asset.drawText(t_table[i], obj.dx, obj.dy)
 		obj.id = i
-		obj:addEventListener("tap", Menu.activateMenu)
+		obj:addEventListener("touch", Menu.chooseMenu)
 	end
 	
 end
