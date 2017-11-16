@@ -14,14 +14,14 @@ local Menu = {}
 Menu.menuBtn = nil
 Menu.state = "hide"
 Menu.menu = nil
-local menuFlag = true
+Menu.menuFlag = true
 
 function Menu.load()
 	Menu.menuBtn = Asset.drawMenu("mnu", display.contentWidth/2 - 30, display.contentHeight/2)
 end
 
 function Menu.toggle()
-	if menuFlag == true then
+	if Menu.menuFlag == true then
 		if Menu.state == "hide" then
 			Menu.show()
 		else
@@ -49,13 +49,13 @@ function Menu.exit(event)
 		menuGroup = display.newGroup()
 	end
 	
-	menuFlag = true
+	Menu.menuFlag = true
 end
 
 function Menu.chooseMenu(event)
 	if event.phase == "began" then
 		local menuBtn = nil
-		if menuFlag == true then
+		if Menu.menuFlag == true then
 			local self = event.target
 			if self.id == 0 then
 				menuBtn = oMenu.load()
@@ -70,7 +70,7 @@ function Menu.chooseMenu(event)
 			end	
 			menuBtn:addEventListener("touch", Menu.exit)
 		end
-		menuFlag = false
+		Menu.menuFlag = false
 	end
 end
 

@@ -20,6 +20,7 @@ end
 
 function scene.allowMove(event)	-- Allow movement
 	moveFlag = true
+	Menu.menuFlag = true
 end
 
 function scene.getEncounter()	-- Roll if there is an encounter
@@ -59,6 +60,7 @@ function scene.moveScene(event)	-- Move screen if allowed
 	if endFlag == false then
 		if moveFlag == true then
 			moveFlag = false
+			Menu.menuFlag = false
 			timer.performWithDelay(400, scene.allowMove)
 			local mdir = scene.getTapLocation()
 			local encounterFlag = Zone.moveZone(mdir)
@@ -102,9 +104,6 @@ function scene.tapCheck(event)	-- Detect screen tap v touch
 		ly = event.y
 	elseif event.phase == "ended" then
 		endFlag = true
-		-- if scene.checkMenuTap(event) == false then
-			-- scene.toggleMenu(event)
-		-- end
 	end
 	return true
 end
