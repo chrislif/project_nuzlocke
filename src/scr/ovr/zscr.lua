@@ -13,16 +13,23 @@ Zone.currentCell.y = 1
 Zone.zoneGrid = nil
 
 local zoneName = nil
-local zx = 1
-local zy = 1
+Zone.zx = 1
+Zone.zy = 1
 local cellSize = 32
 local cellMap = {}
 local objMap = {}
 local player = nil
 
+function Zone.loadConnections()
+	Zone.connections = Grid.connectFile()
+end
+
 function Zone.loadZone(zone)	-- Load a zone from file
 	if #cellMap > 0 then
 		Asset.removeMap(cellMap)
+	end
+	if Zone.connections == nil then
+		Zone.loadConnections()
 	end
 	zoneName = zone
 	Zone.zoneGrid = Grid.zoneToGrid(zone)
@@ -34,8 +41,8 @@ end
 function Zone.drawCells()	-- Draw, duh
 	for _, i in pairs(Zone.zoneGrid) do
 		for _, j in pairs(i) do
-			local xloc = tonumber(j.x) - zx
-			local yloc = tonumber(j.y) - zy
+			local xloc = tonumber(j.x) - Zone.zx
+			local yloc = tonumber(j.y) - Zone.zy
 			local newCell = Asset.drawCell(j, xloc, yloc)
 			local cellID = xloc + 1 .. "." .. yloc + 1
 			cellMap[cellID] = newCell
@@ -44,9 +51,9 @@ function Zone.drawCells()	-- Draw, duh
 end
 
 function Zone.passableCell(x, y)	-- Check if character can walk into cell
-	local checkCell = Zone.zoneGrid[zx - x]
+	local checkCell = Zone.zoneGrid[Zone.zx - x]
 	if checkCell ~= nil then
-		checkCell = checkCell[zy - y]
+		checkCell = checkCell[Zone.zy - y]
 	end
 	if checkCell == nil then
 		return false
@@ -80,10 +87,10 @@ function Zone.moveZone(mdir)	-- Move the zone in response to user input
 			transition.to(obj, {time = 400, x = obj.x + (xshift * cellSize), y = obj.y + (yshift * cellSize)})
 		end
 		
-		zx = zx - xshift
-		zy = zy - yshift
-		Zone.currentCell.x = zx
-		Zone.currentCell.y = zy
+		Zone.zx = Zone.zx - xshift
+		Zone.zy = Zone.zy - yshift
+		Zone.currentCell.x = Zone.zx
+		Zone.currentCell.y = Zone.zy
 		return true
 	end
 	return false
@@ -92,8 +99,8 @@ end
 function Zone.spawnObjects()
 	for _, i in pairs(Zone.zoneGrid) do
 		for _, j in pairs(i) do
-			if j.spn > 0 then
-				local newObj = Asset.drawObj(tonumber(j.x) - zx, tonumber(j.y) - zy)
+			if j.spn == 1 then
+				local newObj = Asset.drawObj(tonumber(j.x) - Zone.zx, tonumber(j.y) - Zone.zy)
 				objMap[j] = newObj
 			end
 		end

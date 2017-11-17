@@ -9,6 +9,75 @@ local File = require "scr.ovr.fscr"
 local Grid = {}
 Grid.mt = {}
 
+function Grid.assignID(typ, dataID)
+	local id_table = {
+		[0] = "oldZone", [1] = "ID", [2] = "newZone", [3] = "newID"
+	}
+	local c_table = {
+		[0] = id_table,
+	}
+	return c_table[typ][dataID]
+end
+
+function Grid.connectFile()
+	dir = "fil/map/" 
+	file = "zoneConnections"
+	local file = File.getFile(dir, file)
+	local dict = {}
+	local dataCell = {}
+	local dataID = 0
+	
+	local tableFlag = false
+	local dataTable = {}
+	local tableName = ""
+	local tableID = 0
+	
+	local fileData = {}
+	for line in file:lines() do
+		table.insert(fileData, line)
+	end
+	
+	for _, dataString in pairs(fileData) do
+		for data in string.gmatch(dataString, "[-*_/%w]*") do
+			if data ~= "" then
+				if tableFlag == false then
+					if data == "/" then
+						dict[dataCell["ID"]] = dataCell
+						dataID = 0
+						dataCell = {}
+					elseif data == "_" then
+						tableFlag = true
+					else
+						if tonumber(data) ~= nil then
+							data = tonumber(data)
+						end
+						
+						dataCell[Grid.assignID(0, dataID)] = data
+						dataID = dataID + 1
+					end
+				else
+					if data == "*" then
+						dataCell[tableName] = dataTable
+						tableFlag = false
+						dataTable = {}
+						tableName = ""
+						tableID = 0
+					else
+						if tableID > 0 then
+							table.insert(dataTable, data)
+							tableID = tableID + 1
+						else
+							tableName = data
+							tableID = tableID + 1
+						end
+					end
+				end
+			end
+		end
+	end
+	return dict
+end
+
 function Grid.new(a, b)	-- Create a new grid
 	local grid = {}
 	setmetatable(grid, Grid.mt)

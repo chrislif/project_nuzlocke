@@ -31,6 +31,18 @@ function scene.getEncounter()	-- Roll if there is an encounter
 	end
 end
 
+function scene.checkZoneChange()	-- Check if cell is a zone change cell
+	local flag = Zone.zoneGrid[Zone.zx][Zone.zy].spn
+	if flag > 500 then
+		print(Zone.connections[flag]["newID"])
+	end
+	return nil
+end
+
+function scene.zoneChange(newZone)
+	
+end
+
 function scene.checkEncounter()	-- Check if cell is an encounter cell
 	local c_table = {
 		[0] = 0,
@@ -39,7 +51,6 @@ function scene.checkEncounter()	-- Check if cell is an encounter cell
 		[3] = 0,
 		[4] = 1,
 	}
-
 	local getEncounter = c_table[Zone.zoneGrid[Zone.currentCell.x][Zone.currentCell.y].typ]
 	if getEncounter > 0 then scene.getEncounter() end
 end
@@ -70,10 +81,16 @@ function scene.moveScene(event)	-- Move screen if allowed
 			Menu.menuFlag = false
 			timer.performWithDelay(400, scene.allowMove)
 			local mdir = scene.getTapLocation()
-			local encounterFlag = Zone.moveZone(mdir)
-			if encounterFlag and mdir ~= "center" then timer.performWithDelay(400, scene.checkEncounter) end
 			if mdir == "center" then
 				scene.interact(event)
+			else
+				if Zone.moveZone(mdir) then
+					timer.performWithDelay(400, scene.checkEncounter)
+				end
+			end
+			local newZone = scene.checkZoneChange()
+			if newZone ~= nil then
+				scene.zoneChange(newZone)
 			end
 		end
 	elseif endFlag == true then

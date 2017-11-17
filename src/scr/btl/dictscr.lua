@@ -108,7 +108,6 @@ function Dict.complexLoad(typ, dir, file)
 				end
 			end
 		end
-		
 	end
 	return dict
 end
