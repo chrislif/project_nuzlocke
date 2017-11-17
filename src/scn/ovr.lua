@@ -5,11 +5,12 @@
 -----------------------------------------------------------------------------------------
 local composer = require "composer"
 local Zone = require "scr.ovr.zscr"
-local Menu = require "scr.ovr.mnscr"
+local Menu = require "scr.ovr.mnu.mnscr"
 
 local scene = composer.newScene()
 local lx = 0
 local ly = 0
+local dir = "down"
 local endFlag = false
 local moveFlag = true
 
@@ -45,15 +46,21 @@ end
 
 function scene.getTapLocation()	-- Get location of tap
 	if ly < display.contentHeight/4 then
-		return "up"
+		dir =  "up"
 	elseif ly > display.contentHeight * (3/4) then
-		return "down"
+		dir = "down"
 	elseif lx < display.contentWidth/4 then
-		return "left"
+		dir = "left"
 	elseif lx > display.contentWidth * (3/4) then
-		return "right"
+		dir = "right"
+	else 
+		return "center"
 	end
-	return "center"
+	return dir
+end
+
+function scene.interact(event)
+	print(dir)
 end
 
 function scene.moveScene(event)	-- Move screen if allowed
@@ -65,6 +72,9 @@ function scene.moveScene(event)	-- Move screen if allowed
 			local mdir = scene.getTapLocation()
 			local encounterFlag = Zone.moveZone(mdir)
 			if encounterFlag and mdir ~= "center" then timer.performWithDelay(400, scene.checkEncounter) end
+			if mdir == "center" then
+				scene.interact(event)
+			end
 		end
 	elseif endFlag == true then
 		timer.cancel(event.source)

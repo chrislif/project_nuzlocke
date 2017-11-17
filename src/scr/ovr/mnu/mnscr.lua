@@ -4,11 +4,11 @@
 -- Menu functions
 -----------------------------------------------------------------------------------------
 local Asset = require "scr.ovr.ascr"
-local tMenu = require "scr.ovr.tmnscr"
-local bMenu = require "scr.ovr.bmnscr"
-local iMenu = require "scr.ovr.imnscr"
-local jMenu = require "scr.ovr.jmnscr"
-local oMenu = require "scr.ovr.omnscr"
+local tMenu = require "scr.ovr.mnu.tmnscr"
+local bMenu = require "scr.ovr.mnu.bmnscr"
+local iMenu = require "scr.ovr.mnu.imnscr"
+local jMenu = require "scr.ovr.mnu.jmnscr"
+local oMenu = require "scr.ovr.mnu.omnscr"
 
 local Menu = {}
 Menu.menuBtn = nil

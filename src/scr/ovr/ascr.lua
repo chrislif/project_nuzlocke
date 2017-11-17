@@ -83,7 +83,15 @@ end
 
 function Asset.playerAnimate(mdir)
 	if player ~= nil then
-		player:setSequence("dwalk")
+		if mdir == "down" then
+			player:setSequence("walk_d")
+		elseif mdir == "up" then
+			player:setSequence("walk_u")
+		elseif mdir == "left" then
+			player:setSequence("walk_l")
+		elseif mdir == "right" then
+			player:setSequence("walk_r")
+		end
 		player:play()
 	end
 end

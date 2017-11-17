@@ -70,6 +70,7 @@ function Zone.moveZone(mdir)	-- Move the zone in response to user input
 		yshift = -1
 	end
 	
+	Asset.playerAnimate(mdir)
 	if Zone.passableCell(xshift, yshift) then
 		for _, cell in pairs(cellMap) do
 			transition.to(cell, {time = 400, x = cell.x + (xshift * cellSize), y = cell.y + (yshift * cellSize)})
@@ -78,7 +79,7 @@ function Zone.moveZone(mdir)	-- Move the zone in response to user input
 		for _, obj in pairs(objMap) do
 			transition.to(obj, {time = 400, x = obj.x + (xshift * cellSize), y = obj.y + (yshift * cellSize)})
 		end
-		Asset.playerAnimate(mdir)
+		
 		zx = zx - xshift
 		zy = zy - yshift
 		Zone.currentCell.x = zx
