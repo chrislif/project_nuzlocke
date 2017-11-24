@@ -62,7 +62,7 @@ function Asset.drawMenu(img, dx, dy)
 end
 
 function Asset.drawCell(cell, dx, dy)
-	local img = imgTable[cell.typ]
+	local img = imgTable[cell["typ"]]
 
 	local newCell = display.newImage("ast/" .. img)
 	newCell.x = display.contentCenterX + (dx * cellSize)

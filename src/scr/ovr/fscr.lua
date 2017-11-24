@@ -6,44 +6,24 @@
 local File = {}
 local fileNumber = tostring(1) .. "f_"
 
-function File.fileExists(dir, name)
-	local res = false
-	local path = system.pathForFile(dir .. name .. ".txt", system.ResourceDirectory)
-	if path ~= nil then
-		res = true
-	end
-	return res
-end
-
 function File.getFile(dir, file)
-	local path = nil
-	if File.fileExists(dir, fileNumber .. file) then
-		path = system.pathForFile(dir .. fileNumber .. file .. ".txt", system.ResourceDirectory)
-	else
-		path = system.pathForFile(dir .. file .. ".txt", system.ResourceDirectory)
-	end
+	local path = system.pathForFile(dir .. file .. ".txt", system.ResourceDirectory)
 	local file, errorString = io.open(path, "r+")
 	
 	if not file then
 		error("File error: " .. errorString)
 	else
-		return file
-	end
-end
-
-function File.getZoneFile(dir, zone)
-	local file = File.getFile(dir, zone)
-	local zoneData = {}
-	
-	for line in file:lines() do
-		table.insert(zoneData, line)
+		local data = {}
 		
+		for line in file:lines() do
+			table.insert(data, line)
+		end
+		
+		io.close(file)
+		file = nil
+			
+		return data
 	end
-	
-	io.close(file)
-	file = nil
-	
-	return zoneData
 end
 
 function File.alterZoneFile(dir, file, cellString)

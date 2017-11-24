@@ -31,18 +31,6 @@ function scene.getEncounter()	-- Roll if there is an encounter
 	end
 end
 
-function scene.checkZoneChange()	-- Check if cell is a zone change cell
-	local flag = Zone.zoneGrid[Zone.zx][Zone.zy].spn
-	if flag > 500 then
-		print(Zone.connections[flag]["newID"])
-	end
-	return nil
-end
-
-function scene.zoneChange(newZone)
-	
-end
-
 function scene.checkEncounter()	-- Check if cell is an encounter cell
 	local c_table = {
 		[0] = 0,

@@ -20,33 +20,24 @@ local cellMap = {}
 local objMap = {}
 local player = nil
 
-function Zone.loadConnections()
-	Zone.connections = Grid.connectFile()
-end
-
 function Zone.loadZone(zone)	-- Load a zone from file
 	if #cellMap > 0 then
 		Asset.removeMap(cellMap)
 	end
-	if Zone.connections == nil then
-		Zone.loadConnections()
-	end
 	zoneName = zone
-	Zone.zoneGrid = Grid.zoneToGrid(zone)
+	Zone.zoneGrid = Grid.getGrid(zone)
 	Zone.drawCells()
 	Zone.spawnObjects()
 	player = Asset.drawPlayer()
 end
 
 function Zone.drawCells()	-- Draw, duh
-	for _, i in pairs(Zone.zoneGrid) do
-		for _, j in pairs(i) do
-			local xloc = tonumber(j.x) - Zone.zx
-			local yloc = tonumber(j.y) - Zone.zy
-			local newCell = Asset.drawCell(j, xloc, yloc)
-			local cellID = xloc + 1 .. "." .. yloc + 1
-			cellMap[cellID] = newCell
-		end
+	for _, cell in pairs(Zone.zoneGrid) do
+		local xloc = cell["x"] - Zone.zx
+		local yloc = cell["y"] - Zone.zy
+		local newCell = Asset.drawCell(cell, xloc, yloc)
+		local cellID = xloc + 1 .. "." .. yloc + 1
+		cellMap[cellID] = newCell
 	end
 end
 
@@ -97,12 +88,10 @@ function Zone.moveZone(mdir)	-- Move the zone in response to user input
 end
 
 function Zone.spawnObjects()
-	for _, i in pairs(Zone.zoneGrid) do
-		for _, j in pairs(i) do
-			if j.spn == 1 then
-				local newObj = Asset.drawObj(tonumber(j.x) - Zone.zx, tonumber(j.y) - Zone.zy)
-				objMap[j] = newObj
-			end
+	for id, cell in pairs(Zone.zoneGrid) do
+		if cell[spn] == 1 then
+			local newObj = Asset.drawObj(cell["x"] - Zone.zx, cell["y"] - Zone.zy)
+			table.insert(objMap, newObj)
 		end
 	end
 end
