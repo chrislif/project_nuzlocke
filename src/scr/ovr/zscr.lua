@@ -42,10 +42,7 @@ function Zone.drawCells()	-- Draw, duh
 end
 
 function Zone.passableCell(x, y)	-- Check if character can walk into cell
-	local checkCell = Zone.zoneGrid[Zone.zx - x]
-	if checkCell ~= nil then
-		checkCell = checkCell[Zone.zy - y]
-	end
+	local checkCell = Zone.zoneGrid[Zone.zx - x .. "." .. Zone.zy - y]
 	if checkCell == nil then
 		return false
 	end
@@ -67,13 +64,12 @@ function Zone.moveZone(mdir)	-- Move the zone in response to user input
 	elseif mdir == "down" then
 		yshift = -1
 	end
-	
 	Asset.playerAnimate(mdir)
 	if Zone.passableCell(xshift, yshift) then
 		for _, cell in pairs(cellMap) do
 			transition.to(cell, {time = 400, x = cell.x + (xshift * cellSize), y = cell.y + (yshift * cellSize)})
-			
 		end
+		
 		for _, obj in pairs(objMap) do
 			transition.to(obj, {time = 400, x = obj.x + (xshift * cellSize), y = obj.y + (yshift * cellSize)})
 		end
@@ -89,7 +85,7 @@ end
 
 function Zone.spawnObjects()
 	for id, cell in pairs(Zone.zoneGrid) do
-		if cell[spn] == 1 then
+		if cell["spn"] == 1 then
 			local newObj = Asset.drawObj(cell["x"] - Zone.zx, cell["y"] - Zone.zy)
 			table.insert(objMap, newObj)
 		end

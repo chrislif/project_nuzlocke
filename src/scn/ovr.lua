@@ -39,7 +39,7 @@ function scene.checkEncounter()	-- Check if cell is an encounter cell
 		[3] = 0,
 		[4] = 1,
 	}
-	local getEncounter = c_table[Zone.zoneGrid[Zone.currentCell.x][Zone.currentCell.y].typ]
+	local getEncounter = c_table[Zone.zoneGrid[Zone.zx .. "." .. Zone.zy].typ]
 	if getEncounter > 0 then scene.getEncounter() end
 end
 
@@ -75,10 +75,6 @@ function scene.moveScene(event)	-- Move screen if allowed
 				if Zone.moveZone(mdir) then
 					timer.performWithDelay(400, scene.checkEncounter)
 				end
-			end
-			local newZone = scene.checkZoneChange()
-			if newZone ~= nil then
-				scene.zoneChange(newZone)
 			end
 		end
 	elseif endFlag == true then

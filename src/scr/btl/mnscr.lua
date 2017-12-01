@@ -113,13 +113,13 @@ function Manager.resolveEffects(checkTime, byt)
 		end
 		return false
 	else
-		if byt["CURR_EFT"] == 1 then
+		if byt["CURR_EFT"] == 1 then	-- Burn
 			local damage = math.floor(Calc.getStat("HP", byt)/10)
-			byt["CURR_HP"] = byt["CURR_HP"] - damage
+			Manager.applyDamage(byt, damage)
 			print(byt["NAME"] .. " takes " .. damage .. " damage from burn")
-		elseif byt["CURR_EFT"] == 2 then
+		elseif byt["CURR_EFT"] == 2 then	-- Poison
 			local damage = math.floor(Calc.getStat("HP", byt)/10)
-			byt["CURR_HP"] = byt["CURR_HP"] - damage
+			Manager.applyDamage(byt, damage)
 			print(byt["NAME"] .. " takes " .. damage .. " damage from psn")
 		end
 	end
