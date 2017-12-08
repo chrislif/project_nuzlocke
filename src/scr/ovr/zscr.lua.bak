@@ -26,7 +26,6 @@ function Zone.loadZone(zone)	-- Load a zone from file
 	Zone.zoneGrid = Grid.getGrid(zone)
 	Zone.drawCells()
 	Zone.spawnObjects()
-	Zone.currentCell = Zone.zoneGrid["1.1"]
 	player = Asset.drawPlayer()
 end
 
