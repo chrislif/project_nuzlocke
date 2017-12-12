@@ -5,49 +5,73 @@
 -----------------------------------------------------------------------------------------
 local Grid = require "scr.ovr.gscr"
 local Asset = require "scr.ovr.ascr"
+local Dict = require "scr.ovr.dscr"
 
 local Zone = {}
 Zone.currentCell = {}
 Zone.zoneGrid = nil
+Zone.zoneDict = nil
 
-local zoneName = nil
-Zone.zx = 1
-Zone.zy = 1
-local cellSize = 32
 local cellMap = {}
 local objMap = {}
-local player = nil
 
-function Zone.loadZone(zone)	-- Load a zone from file
+function Zone.loadDict()
+	Zone.zoneDict = Dict.loadDict()
+end
+
+function Zone.loadZone(zone, port)	-- Load a zone from file
 	if #cellMap > 0 then
 		Asset.removeMap(cellMap)
 	end
-	zoneName = zone
 	Zone.zoneGrid = Grid.getGrid(zone)
 	Zone.drawCells()
 	Zone.spawnObjects()
-	Zone.currentCell = Zone.zoneGrid["1.1"]
-	player = Asset.drawPlayer()
+	local portCell = nil
+	
+	for id, cell in pairs(Zone.zoneGrid) do
+		if tonumber(cell["iport"]) == port then
+			portCell = cell
+		end
+	end
+	
+	local zx = portCell["x"]
+	local zy = portCell["y"]
+	Zone.currentCell = Zone.zoneGrid[zx .. "." .. zy]
+	Asset.drawPlayer(Zone.currentCell)
 end
 
 function Zone.drawCells()	-- Draw, duh
 	for _, cell in pairs(Zone.zoneGrid) do
-		local xloc = cell["x"] - Zone.zx
-		local yloc = cell["y"] - Zone.zy
+		local xloc = cell["x"] - 1
+		local yloc = cell["y"] - 1
 		local newCell = Asset.drawCell(cell, xloc, yloc)
 		local cellID = xloc + 1 .. "." .. yloc + 1
 		cellMap[cellID] = newCell
 	end
 end
 
-function Zone.transferCheck()
-	print(Zone.currentCell["port"])
+function Zone.portCheck(mdir)
+	local dir_table = {
+		["center"] = 0,
+		["up"] = 1,
+		["right"] = 2,
+		["down"] = 3,
+		["left"] = 4
+	}
+	local dir = dir_table[mdir]
+	
+	if Zone.currentCell["eport"] ~= 0 and Zone.currentCell["edir"] == dir then
+		print("port to " .. Zone.zoneDict[Zone.currentCell["eport"]] .. " at " .. Zone.currentCell["portid"])
+		return true
+	end
 
 	return false
 end
 
 function Zone.passableCell(x, y)	-- Check if character can walk into cell
-	local checkCell = Zone.zoneGrid[Zone.zx - x .. "." .. Zone.zy - y]
+	local zx = Zone.currentCell["x"] - x
+	local zy = Zone.currentCell["y"] - y
+	local checkCell = Zone.zoneGrid[zx .. "." .. zy]
 	if checkCell == nil then
 		return false
 	end
@@ -60,6 +84,8 @@ end
 function Zone.moveZone(mdir)	-- Move the zone in response to user input
 	local xshift = 0
 	local yshift = 0
+	local cellSize = 32
+	
 	if mdir == "up" then
 		yshift = 1
 	elseif mdir == "left" then
@@ -70,19 +96,21 @@ function Zone.moveZone(mdir)	-- Move the zone in response to user input
 		yshift = -1
 	end
 	Asset.playerAnimate(mdir)
-	if Zone.passableCell(xshift, yshift) then
-		for _, cell in pairs(cellMap) do
-			transition.to(cell, {time = 400, x = cell.x + (xshift * cellSize), y = cell.y + (yshift * cellSize)})
+	if Zone.portCheck(mdir) == false then
+		if Zone.passableCell(xshift, yshift) then
+			for _, cell in pairs(cellMap) do
+				transition.to(cell, {time = 400, x = cell.x + (xshift * cellSize), y = cell.y + (yshift * cellSize)})
+			end
+			
+			for _, obj in pairs(objMap) do
+				transition.to(obj, {time = 400, x = obj.x + (xshift * cellSize), y = obj.y + (yshift * cellSize)})
+			end
+			
+			local zx = Zone.currentCell["x"] - xshift
+			local zy = Zone.currentCell["y"] - yshift
+			Zone.currentCell = Zone.zoneGrid[zx .. "." .. zy]
+			return true
 		end
-		
-		for _, obj in pairs(objMap) do
-			transition.to(obj, {time = 400, x = obj.x + (xshift * cellSize), y = obj.y + (yshift * cellSize)})
-		end
-		
-		Zone.zx = Zone.zx - xshift
-		Zone.zy = Zone.zy - yshift
-		Zone.currentCell = Zone.zoneGrid[Zone.zx .. "." .. Zone.zy]
-		return true
 	end
 	return false
 end
@@ -90,7 +118,7 @@ end
 function Zone.spawnObjects()
 	for id, cell in pairs(Zone.zoneGrid) do
 		if cell["spn"] == 1 then
-			local newObj = Asset.drawObj(cell["x"] - Zone.zx, cell["y"] - Zone.zy)
+			local newObj = Asset.drawObj(cell["x"] - 1, cell["y"] - 1)
 			table.insert(objMap, newObj)
 		end
 	end

@@ -10,7 +10,7 @@ local Grid = {}
 
 function Grid.assignID(id)
 	local idTable = {
-		[0] = "x", [1] = "y", [2] = "typ", [3] = "pas", [4] = "spn", [5] = "iport", [6] = "eport", [7] = "edir", [8] = "portid",
+		[0] = "x", [1] = "y", [2] = "typ", [3] = "pas", [4] = "spn", [5] = "iport", [6] = "eport",
 	}
 	return idTable[id]
 end

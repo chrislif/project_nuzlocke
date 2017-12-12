@@ -15,7 +15,8 @@ local endFlag = false
 local moveFlag = true
 
 function scene:create(event)	-- Load up first zone
-	Zone.loadZone("zone0")
+	Zone.loadDict()
+	Zone.loadZone("zone0", 3)
 	Menu.load()
 end
 
@@ -39,7 +40,7 @@ function scene.checkEncounter()	-- Check if cell is an encounter cell
 		[3] = 0,
 		[4] = 1,
 	}
-	local getEncounter = c_table[Zone.zoneGrid[Zone.zx .. "." .. Zone.zy].typ]
+	local getEncounter = c_table[Zone.currentCell["typ"]]
 	if getEncounter > 0 then scene.getEncounter() end
 end
 
@@ -72,10 +73,8 @@ function scene.moveScene(event)	-- Move screen if allowed
 			if mdir == "center" then
 				scene.interact(event)
 			else
-				if Zone.transferCheck() == false then
-					if Zone.moveZone(mdir) then
-						timer.performWithDelay(400, scene.checkEncounter)
-					end
+				if Zone.moveZone(mdir) then
+					timer.performWithDelay(400, scene.checkEncounter)
 				end
 			end
 		end

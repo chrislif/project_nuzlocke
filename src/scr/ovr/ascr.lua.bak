@@ -98,8 +98,8 @@ end
 
 function Asset.drawPlayer(cell)
 	player = display.newSprite(spriteSheetTable["player"], spriteSheetTable["playerData"])
-	player.x = display.contentCenterX + ((cell["x"] - 1) * cellSize)
-	player.y = display.contentCenterY + ((cell["y"] - 1) * cellSize) - 8
+	player.x = cell.contentCenterX
+	player.y = cell.contentCenterY - 8
 end
 
 function Asset.removeMap(cellMap)
