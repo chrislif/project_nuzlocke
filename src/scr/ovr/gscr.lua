@@ -34,6 +34,7 @@ function Grid.getGrid(zone)	-- Translates zone file to 2D Grid
 					end
 					zoneCell[Grid.assignID(dataID)] = data
 					dataID = dataID + 1
+					
 				end
 				
 			end	

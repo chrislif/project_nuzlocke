@@ -11,12 +11,26 @@ local Zone = {}
 Zone.currentCell = {}
 Zone.zoneGrid = nil
 Zone.zoneDict = nil
+Zone.player = nil
 
 local cellMap = {}
 local objMap = {}
 
 function Zone.loadDict()
 	Zone.zoneDict = Dict.loadDict()
+end
+
+function Zone.exitZone()
+	print(Zone.player)
+	for i, d in pairs(cellMap) do
+		d:removeSelf()
+	end
+	for i, d in pairs(objMap) do
+		d:removeSelf()
+	end
+	Zone.zoneGrid = {}
+	cellMap = {}
+	objMap = {}
 end
 
 function Zone.loadZone(zone, port)	-- Load a zone from file
@@ -37,7 +51,7 @@ function Zone.loadZone(zone, port)	-- Load a zone from file
 	local zx = portCell["x"]
 	local zy = portCell["y"]
 	Zone.currentCell = Zone.zoneGrid[zx .. "." .. zy]
-	Asset.drawPlayer(Zone.currentCell)
+	Zone.player = Asset.drawPlayer(Zone.currentCell)
 end
 
 function Zone.drawCells()	-- Draw, duh
@@ -62,6 +76,9 @@ function Zone.portCheck(mdir)
 	
 	if Zone.currentCell["eport"] ~= 0 and Zone.currentCell["edir"] == dir then
 		print("port to " .. Zone.zoneDict[Zone.currentCell["eport"]] .. " at " .. Zone.currentCell["portid"])
+		Zone.exitZone()
+		Zone.loadZone(Zone.zoneDict[Zone.currentCell["eport"]], Zone.currentCell["portid"])
+		return true
 	end
 
 	return false
