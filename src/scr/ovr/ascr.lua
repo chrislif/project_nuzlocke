@@ -96,10 +96,18 @@ function Asset.playerAnimate(mdir)
 	end
 end
 
-function Asset.drawPlayer(cell)
+function Asset.drawPlayer(cell,zx, zy, dir)
+	local dir_table = {
+		[1] = "stand_u",
+		[2] = "stand_r",
+		[3] = "stand_d",
+		[4] = "stand_l"
+	}
+	
 	player = display.newSprite(spriteSheetTable["player"], spriteSheetTable["playerData"])
-	player.x = display.contentCenterX + ((cell["x"] - 1) * cellSize)
-	player.y = display.contentCenterY + ((cell["y"] - 1) * cellSize) - 8
+	player.x = display.contentCenterX + ((cell["x"] - zx) * cellSize)
+	player.y = display.contentCenterY + ((cell["y"] - zy) * cellSize) - 8
+	player:setSequence(dir_table[dir])
 	return player
 end
 

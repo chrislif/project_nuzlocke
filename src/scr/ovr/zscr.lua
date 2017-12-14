@@ -34,30 +34,45 @@ function Zone.exitZone()
 end
 
 function Zone.loadZone(zone, port)	-- Load a zone from file
+	-- Remove Cells if necessary
 	if #cellMap > 0 then
 		Asset.removeMap(cellMap)
 	end
-	Zone.zoneGrid = Grid.getGrid(zone)
-	Zone.drawCells()
-	Zone.spawnObjects()
-	local portCell = nil
 	
-	for id, cell in pairs(Zone.zoneGrid) do
+	-- Load Zone grid from file
+	Zone.zoneGrid = Grid.getGrid(zone)
+
+	-- Calculate port cell
+	local portCell = nil
+	for _, cell in pairs(Zone.zoneGrid) do
 		if tonumber(cell["iport"]) == port then
 			portCell = cell
 		end
 	end
 	
+	-- Set x, y and dir
 	local zx = portCell["x"]
 	local zy = portCell["y"]
+	local dir = 3 
+	if Zone.currentCell ~= nil then dir = Zone.currentCell["edir"] end 
+	
+	-- Set current as port cell
 	Zone.currentCell = Zone.zoneGrid[zx .. "." .. zy]
-	Zone.player = Asset.drawPlayer(Zone.currentCell)
+		
+	-- Draw Cells
+	Zone.drawCells(zx, zy)
+	
+	-- Draw Objects
+	Zone.spawnObjects(zx, zy)
+	
+	-- Draw Player
+	Zone.player = Asset.drawPlayer(Zone.currentCell, zx, zy, dir)
 end
 
-function Zone.drawCells()	-- Draw, duh
+function Zone.drawCells(zx, zy)	-- Draw, duh
 	for _, cell in pairs(Zone.zoneGrid) do
-		local xloc = cell["x"] - 1
-		local yloc = cell["y"] - 1
+		local xloc = cell["x"] - zx
+		local yloc = cell["y"] - zy
 		local newCell = Asset.drawCell(cell, xloc, yloc)
 		local cellID = xloc + 1 .. "." .. yloc + 1
 		cellMap[cellID] = newCell
@@ -131,10 +146,10 @@ function Zone.moveZone(mdir)	-- Move the zone in response to user input
 	return false
 end
 
-function Zone.spawnObjects()
+function Zone.spawnObjects(zx, zy)
 	for id, cell in pairs(Zone.zoneGrid) do
 		if cell["spn"] == 1 then
-			local newObj = Asset.drawObj(cell["x"] - 1, cell["y"] - 1)
+			local newObj = Asset.drawObj(cell["x"] - zx, cell["y"] - zy)
 			table.insert(objMap, newObj)
 		end
 	end
