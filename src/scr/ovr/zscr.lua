@@ -129,8 +129,11 @@ function Zone.moveZone(mdir)	-- Move the zone in response to user input
 	Asset.playerAnimate(mdir)
 	if Zone.portCheck(mdir) == false then
 		if Zone.passableCell(xshift, yshift) then
-			for _, cell in pairs(cellMap) do
+			for id, cell in pairs(cellMap) do
 				transition.to(cell, {time = 400, x = cell.x + (xshift * cellSize), y = cell.y + (yshift * cellSize)})
+				if id == "1.1" then
+					print(id, cell.y) 
+				end
 			end
 			
 			for _, obj in pairs(objMap) do
@@ -140,10 +143,10 @@ function Zone.moveZone(mdir)	-- Move the zone in response to user input
 			local zx = Zone.currentCell["x"] - xshift
 			local zy = Zone.currentCell["y"] - yshift
 			Zone.currentCell = Zone.zoneGrid[zx .. "." .. zy]
-			return true
 		end
 	end
-	return false
+	
+	return true
 end
 
 function Zone.spawnObjects(zx, zy)

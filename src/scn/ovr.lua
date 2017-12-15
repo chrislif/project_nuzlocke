@@ -28,6 +28,7 @@ end
 function scene.getEncounter()	-- Roll if there is an encounter
 	local roll = math.random(1, 100)
 	if roll > 60 then
+		endFlag = true
 		composer.gotoScene("scn.btl")
 	end
 end
@@ -41,7 +42,9 @@ function scene.checkEncounter()	-- Check if cell is an encounter cell
 		[4] = 1,
 	}
 	local getEncounter = c_table[Zone.currentCell["typ"]]
-	if getEncounter > 0 then scene.getEncounter() end
+	if getEncounter > 0 then
+		scene.getEncounter() 
+	end
 end
 
 function scene.getTapLocation()	-- Get location of tap
@@ -68,13 +71,14 @@ function scene.moveScene(event)	-- Move screen if allowed
 		if moveFlag == true then
 			moveFlag = false
 			Menu.menuFlag = false
-			timer.performWithDelay(400, scene.allowMove)
 			local mdir = scene.getTapLocation()
 			if mdir == "center" then
 				scene.interact(event)
+				scene.allowMove()
 			else
 				if Zone.moveZone(mdir) then
 					timer.performWithDelay(400, scene.checkEncounter)
+					timer.performWithDelay(400, scene.allowMove)
 				end
 			end
 		end
