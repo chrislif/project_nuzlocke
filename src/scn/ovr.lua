@@ -6,6 +6,7 @@
 local composer = require "composer"
 local Zone = require "scr.ovr.zscr"
 local Menu = require "scr.ovr.mnu.mnscr"
+local Data = require "scr.dscr"
 
 local scene = composer.newScene()
 local lx = 0

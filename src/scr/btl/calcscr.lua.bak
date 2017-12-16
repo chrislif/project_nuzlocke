@@ -3,7 +3,7 @@
 -- calcscr.lua
 -- Calculation functions
 -----------------------------------------------------------------------------------------
-local Data = require "scr.dscr"
+local Data = require "scr.btl.dscr"
 
 local Calc = {}
 

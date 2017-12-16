@@ -4,7 +4,7 @@
 -- Grid functions
 -----------------------------------------------------------------------------------------
 local Cell = require "scr.ovr.cscr"
-local File = require "scr.ovr.fscr"
+local File = require "scr.fscr"
 
 local Grid = {}
 

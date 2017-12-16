@@ -1,21 +1,13 @@
 -----------------------------------------------------------------------------------------
 --
--- dictscr.lua
--- Standard Dictionary functions
+-- dscr.lua
+-- Dictionary functions
 -----------------------------------------------------------------------------------------
-local File = require "scr.btl.fscr"
+local File = require "scr.fscr"
 
-local Dict = {}
+local Data = {}
 
-function Dict.loadDictionary(typ, dir, file)
-	if typ > 0 then
-		return Dict.complexLoad(typ, dir, file)
-	else
-		return Dict.standardLoad(dir, file)
-	end
-end
-
-function Dict.assignID(ct, dataID)
+function Data.assignID(ct, dataID)
 	local pID_table = 
 	{
 		[0] = "ID", [1] = "BYTID", [2] = "NAME", [3] = "LEVEL", [4] = "BOOST",
@@ -58,11 +50,8 @@ function Dict.assignID(ct, dataID)
 	return c_table[ct][dataID]
 end
 
-function Dict.complexLoad(typ, dir, file)
-	if dir ~= nil then
-		file = dir .. "/" .. file
-	end
-	local fileData = File.getFile(file)
+function Data.complexLoad(typ, dir, file)
+	local fileData = File.getFile(dir, file)
 	local dict = {}
 	local dataCell = {}
 	local dataID = 0
@@ -86,7 +75,7 @@ function Dict.complexLoad(typ, dir, file)
 						if tonumber(data) ~= nil then
 							data = tonumber(data)
 						end
-						dataCell[Dict.assignID(typ, dataID)] = data
+						dataCell[Data.assignID(typ, dataID)] = data
 						dataID = dataID + 1
 					end
 				else
@@ -112,11 +101,8 @@ function Dict.complexLoad(typ, dir, file)
 	return dict
 end
 
-function Dict.standardLoad(dir, file)
-	if dir ~= nil then
-		file = dir .. "/" .. file
-	end
-	local fileData = File.getFile(file)
+function Data.standardLoad(dir, file)
+	local fileData = File.getFile(dir, file)
 	local dict = {}
 	
 	for _, dataString in pairs(fileData) do
@@ -136,4 +122,28 @@ function Dict.standardLoad(dir, file)
 	return dict
 end
 
-return Dict
+function Data.loadData()
+	Data.TYP = Data.loadDictionary(0, "fil/dict/", "typ_dict")
+	Data.TBL = Data.loadDictionary(4, "fil/dict/", "typ_tbl")
+	Data.NAT = Data.loadDictionary(0, "fil/dict/", "nat_dict")
+	Data.ABL = Data.loadDictionary(0, "fil/dict/", "abil_dict")
+	Data.BST = Data.loadDictionary(0, "fil/dict/", "bst_dict")
+	Data.NPC = Data.loadDictionary(0, "fil/dict/", "npc_dict")
+	Data.MOV = Data.loadDictionary(2, "fil/dict/", "mov_dict")
+	Data.BYT = Data.loadDictionary(3, "fil/dict/", "byt_dict")
+end
+
+function Data.loadTeams(pNum, eNum)
+	Data.PLY = Data.loadDictionary(1, "fil/", pNum .. "f_pteam")
+	Data.ENM = Data.loadDictionary(1, "fil/npc/", eNum .. "_eteam")
+end
+
+function Data.loadDictionary(typ, dir, file)
+	if typ > 0 then
+		return Data.complexLoad(typ, dir, file)
+	else
+		return Data.standardLoad(dir, file)
+	end
+end
+
+return Data

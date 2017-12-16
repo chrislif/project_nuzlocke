@@ -32,10 +32,6 @@ function Grid.getGrid(zone)	-- Translates zone file to 2D Grid
 					if tonumber(data) ~= nil then
 						data = tonumber(data)
 					end
-					local maxID = 8
-					if dataID < maxID then
-						print(dataID)
-					end
 					zoneCell[Grid.assignID(dataID)] = data
 					dataID = dataID + 1
 					

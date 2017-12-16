@@ -5,7 +5,7 @@
 -----------------------------------------------------------------------------------------
 local Grid = require "scr.ovr.gscr"
 local Asset = require "scr.ovr.ascr"
-local Dict = require "scr.ovr.dscr"
+local Data = require "scr.dscr"
 
 local Zone = {}
 Zone.currentCell = {}
@@ -17,7 +17,7 @@ local cellMap = {}
 local objMap = {}
 
 function Zone.loadDict()
-	Zone.zoneDict = Dict.loadDict()
+	Zone.zoneDict = Data.loadDict()
 end
 
 function Zone.exitZone()
@@ -131,9 +131,6 @@ function Zone.moveZone(mdir)	-- Move the zone in response to user input
 		if Zone.passableCell(xshift, yshift) then
 			for id, cell in pairs(cellMap) do
 				transition.to(cell, {time = 400, x = cell.x + (xshift * cellSize), y = cell.y + (yshift * cellSize)})
-				if id == "1.1" then
-					print(id, cell.y) 
-				end
 			end
 			
 			for _, obj in pairs(objMap) do
@@ -145,6 +142,7 @@ function Zone.moveZone(mdir)	-- Move the zone in response to user input
 			Zone.currentCell = Zone.zoneGrid[zx .. "." .. zy]
 		end
 	end
+	
 	return true
 end
 

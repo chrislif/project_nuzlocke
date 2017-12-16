@@ -5,7 +5,7 @@
 -----------------------------------------------------------------------------------------
 local composer = require "composer"
 local UI = require "scr.btl.uiscr"
-local Data = require "scr.btl.dscr"
+local Data = require "scr.dscr"
 local Calc = require "scr.btl.calcscr"
 
 local Manager = {}
