@@ -30,18 +30,13 @@ function tMenu.load()
 	for id, byt in pairs(Data.PLY) do
 		-- Team ID
 		local id_tag = Asset.drawGroupText(menuGroup, "BYT " .. id, -display.contentWidth/3, -display.contentHeight/2 + (64 * tonumber(id)))
-		for name, value in pairs(byt) do
-			if name == "NAME" then
-				-- Name
-				local name_tag = Asset.drawGroupText(menuGroup, value, -display.contentWidth/3 + 64, -display.contentHeight/2 + (64 * tonumber(id)))
-			elseif name == "CURR_HP" then
-				-- Current HP
-				local curr_hp_tag = Asset.drawGroupText(menuGroup, value, -display.contentWidth/3, -display.contentHeight/2 + (64 * tonumber(id)) + 32)
-			elseif name == "BYTID" then
-				-- Max HP
-				local max_hp_tag = Asset.drawGroupText(menuGroup, " / " .. Calc.getStat("HP", byt), -display.contentWidth/3 + 20, -display.contentHeight/2 + (64 * tonumber(id)) + 32)
-			end
-		end
+		-- Name
+		local name_tag = Asset.drawGroupText(menuGroup, byt["NAME"], -display.contentWidth/3 + 64, -display.contentHeight/2 + (64 * tonumber(id)))
+		-- Current HP
+		local curr_hp_tag = Asset.drawGroupText(menuGroup, byt["CURR_HP"], -display.contentWidth/3, -display.contentHeight/2 + (64 * tonumber(id)) + 32)
+		-- Max HP
+		local max_hp_tag = Asset.drawGroupText(menuGroup, " / " .. Calc.getStat("HP", byt), -display.contentWidth/3 + 26, -display.contentHeight/2 + (64 * tonumber(id)) + 32)
+		
 	end
 	
 	return tMenu.back
