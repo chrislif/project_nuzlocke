@@ -17,7 +17,7 @@ local cellMap = {}
 local objMap = {}
 
 function Zone.loadDict()
-	Zone.zoneDict = Data.loadDict()
+	Zone.zoneDict = Data.loadDictionary(0, "fil/map/", "zone_dict")
 end
 
 function Zone.exitZone()

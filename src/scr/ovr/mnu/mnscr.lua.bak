@@ -31,6 +31,7 @@ function Menu.toggle()
 end
 
 function Menu.hide(event)
+	print("hide")
 	Menu.state = "hide"
 	for i, obj in pairs(Menu.menu) do
 		obj.text:removeSelf()
@@ -97,6 +98,7 @@ function Menu.drawMenu()
 end
 
 function Menu.show(event)
+	print("show")
 	Menu.state = "show"
 	if Menu.menu ~= nil then
 		Menu.hide()

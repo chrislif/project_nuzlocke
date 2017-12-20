@@ -5,6 +5,8 @@
 -----------------------------------------------------------------------------------------
 local File = require "scr.fscr"
 
+local fileNumber = tostring(1) .. "f_"
+
 local Data = {}
 
 function Data.assignID(ct, dataID)
@@ -40,7 +42,7 @@ function Data.assignID(ct, dataID)
 		[6] = 6, [7] = 7, [8] = 8, [9] = 9, [10] = 10, [11] = 11, 
 		[12] = 12, [13] = 13, [14] = 14, [15] = 15, [16] = 16, [17] = 17,
 	}
-		local c_table = 
+	local c_table = 
 	{
 		[1] = pID_table,
 		[2] = mvID_table,
@@ -131,6 +133,11 @@ function Data.loadData()
 	Data.NPC = Data.loadDictionary(0, "fil/dict/", "npc_dict")
 	Data.MOV = Data.loadDictionary(2, "fil/dict/", "mov_dict")
 	Data.BYT = Data.loadDictionary(3, "fil/dict/", "byt_dict")
+	Data.PLY = Data.loadDictionary(1, "fil/", fileNumber .. "pteam")
+end
+
+function Data.alterTeam()
+	
 end
 
 function Data.loadTeams(pNum, eNum)

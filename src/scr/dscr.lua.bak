@@ -5,54 +5,9 @@
 -----------------------------------------------------------------------------------------
 local File = require "scr.fscr"
 
+local fileNumber = tostring(1) .. "f_"
+
 local Data = {}
-
-function Data.loadData()
-	Data.TYP = Data.loadDictionary(0, "fil/dict/", "typ_dict")
-	Data.TBL = Data.loadDictionary(4, "fil/dict/", "typ_tbl")
-	Data.NAT = Data.loadDictionary(0, "fil/dict/", "nat_dict")
-	Data.ABL = Data.loadDictionary(0, "fil/dict/", "abil_dict")
-	Data.BST = Data.loadDictionary(0, "fil/dict/", "bst_dict")
-	Data.NPC = Data.loadDictionary(0, "fil/dict/", "npc_dict")
-	Data.MOV = Data.loadDictionary(2, "fil/dict/", "mov_dict")
-	Data.BYT = Data.loadDictionary(3, "fil/dict/", "byt_dict")
-end
-
-function Data.loadTeams(pNum, eNum)
-	Data.PLY = Data.loadDictionary(1, "fil/", pNum .. "f_pteam")
-	Data.ENM = Data.loadDictionary(1, "fil/npc/", eNum .. "_eteam")
-end
-
-function Data.loadDict()
-	-- return Data.loadDictionary(0, "fil/map/", "zone_dict")
-	-- local fileData = File.getFile("fil/map/", "zone_dict")
-	-- local dict = {}
-	
-	-- for _, dataString in pairs(fileData) do
-		-- local id = 0
-		-- local name = ""
-		-- for data in string.gmatch(dataString, "%w*") do
-			-- if data ~= "" then
-				-- if id ~= 0 then
-					-- name = data
-				-- else
-					-- id = tonumber(data)
-				-- end
-			-- end
-		-- end
-		-- dict[id] = name
-	-- end
-
-	-- return dict
-end
-
-function Data.loadDictionary(typ, dir, file)
-	if typ > 0 then
-		return Data.complexLoad(typ, dir, file)
-	else
-		return Data.standardLoad(dir, file)
-	end
-end
 
 function Data.assignID(ct, dataID)
 	local pID_table = 
@@ -87,7 +42,7 @@ function Data.assignID(ct, dataID)
 		[6] = 6, [7] = 7, [8] = 8, [9] = 9, [10] = 10, [11] = 11, 
 		[12] = 12, [13] = 13, [14] = 14, [15] = 15, [16] = 16, [17] = 17,
 	}
-		local c_table = 
+	local c_table = 
 	{
 		[1] = pID_table,
 		[2] = mvID_table,
@@ -167,6 +122,35 @@ function Data.standardLoad(dir, file)
 		dict[id] = name
 	end
 	return dict
+end
+
+function Data.loadData()
+	Data.TYP = Data.loadDictionary(0, "fil/dict/", "typ_dict")
+	Data.TBL = Data.loadDictionary(4, "fil/dict/", "typ_tbl")
+	Data.NAT = Data.loadDictionary(0, "fil/dict/", "nat_dict")
+	Data.ABL = Data.loadDictionary(0, "fil/dict/", "abil_dict")
+	Data.BST = Data.loadDictionary(0, "fil/dict/", "bst_dict")
+	Data.NPC = Data.loadDictionary(0, "fil/dict/", "npc_dict")
+	Data.MOV = Data.loadDictionary(2, "fil/dict/", "mov_dict")
+	Data.BYT = Data.loadDictionary(3, "fil/dict/", "byt_dict")
+	Data.PLY = Data.loadDictionary(1, "fil/", fileNumber .. "f_pteam")
+end
+
+function Data.alterTeam()
+	
+end
+
+function Data.loadTeams(pNum, eNum)
+	Data.PLY = Data.loadDictionary(1, "fil/", pNum .. "f_pteam")
+	Data.ENM = Data.loadDictionary(1, "fil/npc/", eNum .. "_eteam")
+end
+
+function Data.loadDictionary(typ, dir, file)
+	if typ > 0 then
+		return Data.complexLoad(typ, dir, file)
+	else
+		return Data.standardLoad(dir, file)
+	end
 end
 
 return Data

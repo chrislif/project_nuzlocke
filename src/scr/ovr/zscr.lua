@@ -90,7 +90,6 @@ function Zone.portCheck(mdir)
 	local dir = dir_table[mdir]
 	
 	if Zone.currentCell["eport"] ~= 0 and Zone.currentCell["edir"] == dir then
-		print("port to " .. Zone.zoneDict[Zone.currentCell["eport"]] .. " at " .. Zone.currentCell["portid"])
 		Zone.exitZone()
 		Zone.loadZone(Zone.zoneDict[Zone.currentCell["eport"]], Zone.currentCell["portid"])
 		return true

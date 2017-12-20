@@ -39,7 +39,7 @@ function tMenu.load()
 				local curr_hp_tag = Asset.drawGroupText(menuGroup, value, -display.contentWidth/3, -display.contentHeight/2 + (64 * tonumber(id)) + 32)
 			elseif name == "BYTID" then
 				-- Max HP
-				local max_hp_tag = Asset.drawGroupText(menuGroup, " / " .. Calc.getStat("HP", byt), -display.contentWidth/3 + 26, -display.contentHeight/2 + (64 * tonumber(id)) + 32)
+				local max_hp_tag = Asset.drawGroupText(menuGroup, " / " .. Calc.getStat("HP", byt), -display.contentWidth/3 + 20, -display.contentHeight/2 + (64 * tonumber(id)) + 32)
 			end
 		end
 	end
