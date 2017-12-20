@@ -404,6 +404,7 @@ function Manager.startBattle()	-- Run at start of Battle Scene
 	inputFlag = true
 	toggleFlag = true
 	-- Load Data
+	Data.loadData()
 	Data.loadTeams(fileNumber, 1)
 	-- Load UI
 	Manager.pByt = Data.PLY[1]

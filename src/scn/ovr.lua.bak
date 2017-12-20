@@ -15,8 +15,7 @@ local dir = "down"
 local endFlag = false
 local moveFlag = true
 
-function scene:create(event)	-- Load game
-	Data.loadData()
+function scene:create(event)	-- Load up first zone
 	Zone.loadDict()
 	Zone.loadZone("zone0", 3)
 	Menu.load()

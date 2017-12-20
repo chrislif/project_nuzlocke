@@ -35,9 +35,10 @@ function tMenu.load()
 		-- Current HP
 		local curr_hp_tag = Asset.drawGroupText(menuGroup, byt["CURR_HP"], -display.contentWidth/3, -display.contentHeight/2 + (64 * tonumber(id)) + 32)
 		-- Max HP
-		local max_hp_tag = Asset.drawGroupText(menuGroup, " / " .. Calc.getStat("HP", byt), -display.contentWidth/3 + 26, -display.contentHeight/2 + (64 * tonumber(id)) + 32)	
+		local max_hp_tag = Asset.drawGroupText(menuGroup, " / " .. Calc.getStat("HP", byt), -display.contentWidth/3 + 26, -display.contentHeight/2 + (64 * tonumber(id)) + 32)
+		
 	end
-	 
+	
 	return tMenu.back
 end
 
