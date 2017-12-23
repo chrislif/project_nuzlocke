@@ -83,14 +83,14 @@ end
 
 function Manager.resolveEffects(checkTime, byt)
 	if checkTime == 1 then
-		if byt["CURR_EFT"] == 3 then
+		if byt["CURR_EFT"] == 3 then	-- Stun
 			local effectFlag = false
 			if Calc.rollEffect(1, 30) > 0 then
 				effectFlag = true
 				print(byt["NAME"] .. " is unable to move")
 			end
 			return effectFlag
-		elseif byt["CURR_EFT"] == 4 then
+		elseif byt["CURR_EFT"] == 4 then	-- Freeze
 			local effectFlag = true
 			if Calc.rollEffect(1, 30) > 0 then
 				byt["CURR_EFT"] = 0
@@ -100,7 +100,7 @@ function Manager.resolveEffects(checkTime, byt)
 				print(byt["NAME"] .. " is frozen")
 			end
 			return effectFlag
-		elseif byt["CURR_EFT"] == 5 then
+		elseif byt["CURR_EFT"] == 5 then	-- Sleep
 			local effectFlag = true
 			if Calc.rollEffect(1, 30) > 0 then
 				byt["CURR_EFT"] = 0
