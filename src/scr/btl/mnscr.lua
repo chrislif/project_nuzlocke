@@ -19,9 +19,9 @@ function Manager.runEnd(winner)	-- Run the end of Battle
 	
 	if winner == "player" then
 		
-		
+		print("PLAYER WINS")
 	else
-		
+		print("ENEMY WINS")
 		
 	end
 	
@@ -214,43 +214,15 @@ function Manager.applyDamage(target, damage)	-- Apply Damage to Target
 end
 
 function Manager.applyEffect(target, effect)	-- Apply Effect to Target
-	if effect == 1 then 		-- Burn
-		if target["CURR_EFT"] == 0 then
-			target["CURR_EFT"] = 1
-		else
-			print(target["NAME"] .. " is already " .. target["CURR_EFT"])
-		end
-	elseif effect == 2 then		-- Psn
-		if target["CURR_EFT"] == 0 then
-			target["CURR_EFT"] = 2
-		else
-			print(target["NAME"] .. " is already " .. target["CURR_EFT"])
-		end
-	elseif effect == 3 then		-- Stun
-		if target["CURR_EFT"] == 0 then
-			target["CURR_EFT"] = 3
-		else
-			print(target["NAME"] .. " is already " .. target["CURR_EFT"])
-		end
-	elseif effect == 4 then		-- Freeze
-		if target["CURR_EFT"] == 0 then
-			target["CURR_EFT"] = 4
-		else
-			print(target["NAME"] .. " is already " .. target["CURR_EFT"])
-		end
-	elseif effect == 5 then		-- Sleep
-		if target["CURR_EFT"] == 0 then
-			target["CURR_EFT"] = 5
-		else
-			print(target["NAME"] .. " is already " .. target["CURR_EFT"])
-		end
-	elseif effect == 6 then		-- Confuse
-	elseif effect == 7 then		-- DoT
-	elseif effect == 8 then		-- Leech
-	elseif effect == 9 then		-- Flinch
-	elseif effect == 10 then	-- Swap
+	if effect == 10 then	-- Swap
 		Manager.pByt = target
 		Manager.switchMenu()
+	else
+		if target["CURR_EFT"] == 0 then
+		target["CURR_EFT"] = effect
+		else
+			print(target["NAME"] .. " is already " .. target["CURR_EFT"])
+		end
 	end
 	UI.update(Manager.pByt, Manager.eByt)
 end
@@ -364,7 +336,6 @@ function Manager.runTurn(event)	-- Run a standard turn
 			Manager.eByt["CURR_EFT"] = 0
 			Manager.getEnemyByt()
 		end
-		
 	end
 end
 
@@ -410,6 +381,7 @@ function Manager.startBattle()	-- Run at start of Battle Scene
 	Manager.eByt = Data.ENM[1]
 	UI.loadUI(Manager.pByt, Manager.eByt)
 	UI.toggleBtn:addEventListener("tap", Manager.switchMenu)
+	
 	Manager.addEventListeners(UI.menu)
 end
 
