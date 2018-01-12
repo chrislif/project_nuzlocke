@@ -214,6 +214,10 @@ function Manager.applyDamage(target, damage)	-- Apply Damage to Target
 end
 
 function Manager.applyEffect(target, effect)	-- Apply Effect to Target
+	---------------------------------------------------------------------
+	-- 1 = Burn | 2 = Psn | 3 = Stun | 4 = Frz | 5 = Slp
+	-- 6 = Confuse | 7 = DoT | 8 = Leech | 9 = Flinch | 10 = Swap
+	---------------------------------------------------------------------
 	if effect == 10 then	-- Swap
 		Manager.pByt = target
 		Manager.switchMenu()
