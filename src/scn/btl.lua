@@ -4,7 +4,7 @@
 -- Battle Scene
 -----------------------------------------------------------------------------------------
 local composer = require "composer"
-local Manager = require "scr.btl.mnscr"
+local Manager = require "scr.btl.turn"
 
 local scene = composer.newScene()
 

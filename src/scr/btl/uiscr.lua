@@ -10,6 +10,11 @@ local Data = require "scr.dscr"
 local UI = {}
 UI.state = "FIGHT"
 
+function UI.loadTextBox(data)
+	UI.textBox = Asset.loadImage("txtbox", 0, 205, UI.menuGroup)
+	UI.loadText(UI.textBox, data, 0, 0)
+end
+
 function UI.loadText(obj, textStr, dx, dy)
 	local textOptions = {
 		parent = UI.menuGroup,

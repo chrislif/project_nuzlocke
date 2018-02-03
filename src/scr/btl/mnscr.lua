@@ -221,12 +221,14 @@ function Manager.applyEffect(target, effect)	-- Apply Effect to Target
 	if effect == 10 then	-- Swap
 		Manager.pByt = target
 		Manager.switchMenu()
-	else
+	elseif effect < 6 then
 		if target["CURR_EFT"] == 0 then
-		target["CURR_EFT"] = effect
+			target["CURR_EFT"] = effect
 		else
 			print(target["NAME"] .. " is already " .. target["CURR_EFT"])
 		end
+	else
+		-- Need to add other effects
 	end
 	UI.update(Manager.pByt, Manager.eByt)
 end
@@ -280,9 +282,9 @@ function Manager.runTurn(event)	-- Run a standard turn
 	local src = event.target
 	
 	if inputFlag == false or src.data == nil then	-- Disable Input
-		return 
+		return
 	else
-		if src.data["move"] ~= nil then
+		if src.data["move"] ~= nil then -- Check for valid input
 			if Manager.pByt[src.data["move"] .. "_U"] < 1 then print("No uses of move left") return end
 		end
 		-- Run Standard Turn
@@ -385,7 +387,6 @@ function Manager.startBattle()	-- Run at start of Battle Scene
 	Manager.eByt = Data.ENM[1]
 	UI.loadUI(Manager.pByt, Manager.eByt)
 	UI.toggleBtn:addEventListener("tap", Manager.switchMenu)
-	
 	Manager.addEventListeners(UI.menu)
 end
 
