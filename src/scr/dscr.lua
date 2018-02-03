@@ -110,7 +110,7 @@ function Data.standardLoad(dir, file)
 	for _, dataString in pairs(fileData) do
 		local id = 0
 		local name = ""
-		for data in string.gmatch(dataString, "%w*") do
+		for data in string.gmatch(dataString, "[_%w]*") do
 			if data ~= "" then
 				if id ~= 0 then
 					name = data

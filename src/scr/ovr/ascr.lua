@@ -15,6 +15,7 @@ local imgTable = {
 	[2] = "snd.png",
 	[3] = "wtr.png",
 	[4] = "tgrs.png",
+	[5] = "mtl.png",
 }
 
 local sprTable = {}

@@ -18,7 +18,7 @@ local moveFlag = true
 function scene:create(event)	-- Load game
 	Data.loadData()
 	Zone.loadDict()
-	Zone.loadZone("zone0", 3)
+	Zone.loadZone("zone_home", 3)
 	Menu.load()
 end
 
@@ -42,6 +42,7 @@ function scene.checkEncounter()	-- Check if cell is an encounter cell
 		[2] = 0,
 		[3] = 0,
 		[4] = 1,
+		[5] = 0,
 	}
 	local getEncounter = c_table[Zone.currentCell["typ"]]
 	if getEncounter > 0 then
